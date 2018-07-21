@@ -23,7 +23,7 @@ namespace AndroidManager.Business
             services.AddTransient<IAuthenticationManager, AuthenticationManager>(s => new AuthenticationManager(s.GetService<UserManager<ApplicationUser>>(), s.GetService<SignInManager<ApplicationUser>>()));
             services.AddTransient<ISkillsManager, SkillsManager>(s => new SkillsManager(s.GetService<ApplicationContext>()));
             services.AddTransient<IJobsManager, JobsManager>(s => new JobsManager(s.GetService<ApplicationContext>()));
-            services.AddTransient<IAndroidsManager, AndroidsManager>(s => new AndroidsManager(s.GetService<ApplicationContext>()));ma
+            services.AddTransient<IAndroidsManager, AndroidsManager>(s => new AndroidsManager(s.GetService<ApplicationContext>()));
         }
     }
 }
