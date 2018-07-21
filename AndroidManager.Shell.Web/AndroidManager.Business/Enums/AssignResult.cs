@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace AndroidManager.Business.Enums
+{
+    public enum AssignResult
+    {
+        Success,
+        JobNotExists,
+        AndroidNotExists,
+        AndroidReclaimed,
+        AlreadyThisJob
+    }
+}

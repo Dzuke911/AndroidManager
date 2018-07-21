@@ -3,24 +3,24 @@ using AndroidManager.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace AndroidManager.Business.Managers
 {
-    class SkillsManager : ISkillsManager
+    public class JobsManager : IJobsManager
     {
         private readonly ApplicationContext _context;
 
-        public SkillsManager( ApplicationContext context)
+        public JobsManager(ApplicationContext context)
         {
             _context = context;
         }
 
-        public async Task<bool> IsSkill(string name)
+        public async Task<bool> IsJob(string name)
+
         {
-            if(await _context.Skills.FirstOrDefaultAsync(s => s.Name == name) != null)
+            if (await _context.Jobs.FirstOrDefaultAsync(j => j.Name == name) != null)
             {
                 return true;
             }
@@ -30,12 +30,12 @@ namespace AndroidManager.Business.Managers
 
         public async Task<bool> TryCreate(string name)
         {
-            if(await IsSkill(name))
+            if (await IsJob(name))
             {
                 return false;
             }
 
-            await _context.Skills.AddAsync(new SkillEntity { Name = name });
+            await _context.Jobs.AddAsync(new JobEntity { Name = name });
             await _context.SaveChangesAsync();
 
             return true;
