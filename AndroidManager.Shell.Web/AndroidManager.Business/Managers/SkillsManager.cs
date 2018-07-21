@@ -18,6 +18,7 @@ namespace AndroidManager.Business.Managers
         }
 
         public async Task<bool> IsSkill(string name)
+
         {
             if(await _context.Skills.FirstOrDefaultAsync(s => s.Name == name) != null)
             {
@@ -27,7 +28,7 @@ namespace AndroidManager.Business.Managers
             return false;
         }
 
-        public async Task<bool> CreateSkill(string name)
+        public async Task<bool> TryCreate(string name)
         {
             if(await IsSkill(name))
             {
