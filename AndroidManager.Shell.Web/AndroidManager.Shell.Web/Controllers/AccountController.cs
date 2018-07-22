@@ -46,7 +46,7 @@ namespace AndroidManager.Shell.Web.Controllers
                 if (result.Succeeded)
                 {
                     //return RedirectToLocal(returnUrl);
-                    return RedirectToAction(nameof(HomeController.Index), "Home");
+                    return RedirectToAction(nameof(HomeController.Jobs), "Home");
                 }
                 if (result.IsLockedOut)
                 {
@@ -110,7 +110,7 @@ namespace AndroidManager.Shell.Web.Controllers
             }
             else
             {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                return RedirectToAction(nameof(HomeController.Jobs), "Home");
             }
         }
 

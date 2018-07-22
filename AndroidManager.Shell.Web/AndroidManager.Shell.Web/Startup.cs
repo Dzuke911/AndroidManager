@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using AndroidManager.Business;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using React.AspNet;
 
 namespace AndroidManager.Shell.Web
 {
@@ -20,12 +22,16 @@ namespace AndroidManager.Shell.Web
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); //react
+            services.AddReact(); //react
             services.AddMvc();
 
             BusinessFacade.Configuration = Configuration;
             BusinessFacade.ConfigureServices(services);
+
+            return services.BuildServiceProvider();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,6 +47,9 @@ namespace AndroidManager.Shell.Web
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseReact(config => { }); //react
+            app.UseDefaultFiles(); //react
+
             app.UseStaticFiles();
 
             app.UseAuthentication();
@@ -49,7 +58,7 @@ namespace AndroidManager.Shell.Web
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Jobs}/{id?}");
             });
         }
     }

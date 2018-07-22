@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<span id="GetJobsUrl" style="display:none">@Url.Action("Get", "Jobs")</span>
+<span id="PostJobsUrl" style="display:none">@Url.Action("Post", "Jobs")</span>
+<div class="row">
+    <div class="col-sm-12">
+        @*<span id="GetMapUrl" style="display:none">@Url.Action("GetMap", "Home")</span>
+            <span id="GetUnitsUrl" style="display:none">@Url.Action("GetUnits", "Home")</span>
+            <img id="TestBgImage" src="~/images/WoHTestBackground.png" style="display:none; position:absolute" />*@
+        <div id="JobsPannel">
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src=@Url.Content("~/js/Job.jsx")></script>
+    <script src=@Url.Content("~/js/JobComplexityInput.jsx")></script>
+    <script src=@Url.Content("~/js/JobNameInput.jsx")></script>
+    <script src=@Url.Content("~/js/JobDescriptionInput.jsx")></script>
+    <script src=@Url.Content("~/js/CreateJob.jsx")></script>
+    <script src=@Url.Content("~/js/JobsPannel.jsx")></script>
+}

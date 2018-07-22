@@ -66,6 +66,8 @@
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>
