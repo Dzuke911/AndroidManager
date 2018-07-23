@@ -1,4 +1,4 @@
-﻿class CreateJob extends React.Component {
+﻿class CreateJobForm extends React.Component {
     constructor(props) {
         super(props);
 
@@ -12,8 +12,6 @@
         let Complexity = this.refs.jobComplexityInput.state.value;
 
         let data = { "Name": Name, "Description": Description, "Complexity": Complexity };
-
-        console.log(data);
 
         this.props.onCreateJob(data);
     }

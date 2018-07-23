@@ -1,4 +1,5 @@
 ﻿using AndroidManager.Business.Interfaces;
+using AndroidManager.Business.Models;
 using AndroidManager.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
@@ -29,17 +30,44 @@ namespace AndroidManager.Business.Managers
             return false;
         }
 
-        public async Task<bool> TryCreate(string name, string description, int complexity)
+        public async Task<JObject> TryCreate(Job job)
         {
-            if (await IsJob(name))
+
+            if (!job.IsValid || await IsJob(job.Name))
             {
-                return false;
+                return null;
             }
 
-            await _context.Jobs.AddAsync(new JobEntity { Name = name , Description = description, Complexity = complexity});
+            JobEntity jobEntity = new JobEntity { Name = job.Name, Description = job.Description, Complexity = job.Complexity };
+
+            await _context.Jobs.AddAsync(jobEntity);
             await _context.SaveChangesAsync();
 
-            return true;
+            return job.ToJson(jobEntity.Id);
+        }
+
+        public async Task<JObject> TryUpdate(int id, Job job)
+        {
+            if(!job.IsValid)
+            {
+                return null;
+            }
+
+            JobEntity jobEntity = await _context.Jobs.SingleOrDefaultAsync(j => j.Id == id);
+
+            if(jobEntity == null)
+            {
+                return null;
+            }
+
+            jobEntity.Name = job.Name;
+            jobEntity.Description = job.Description;
+            jobEntity.Complexity = job.Complexity;
+
+            _context.Update(jobEntity);
+            await _context.SaveChangesAsync();
+
+            return job.ToJson(jobEntity.Id);
         }
 
         public async Task<IEnumerable<JObject>> GetJobs()

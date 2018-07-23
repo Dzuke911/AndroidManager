@@ -8,6 +8,7 @@ using AndroidManager.Shell.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json.Linq;
 using AndroidManager.Business.Interfaces;
+using AndroidManager.Business.Models;
 
 namespace AndroidManager.Shell.Web.Controllers
 {
@@ -30,13 +31,29 @@ namespace AndroidManager.Shell.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]JObject job)
         {
-            bool result = await _jobsManager.TryCreate((string)job.Property("Name"), (string)job.Property("Description"), (int)job.Property("Complexity"));
-            if (result)
+            Job newJob = new Job((string)job.Property("Name"), (string)job.Property("Description"), (int)job.Property("Complexity"));
+            JObject result = await _jobsManager.TryCreate(newJob);
+
+            if (result != null)
             {
-                return Ok(job);
+                return Ok(result);
             }
 
-            return BadRequest(job);
+            return BadRequest(result);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody]JObject job)
+        {
+            Job newJob = new Job((string)job.Property("Name"), (string)job.Property("Description"), (int)job.Property("Complexity"));
+            JObject result = await _jobsManager.TryUpdate((int)job.Property("Id"),newJob);
+
+            if (result != null)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result);
         }
     }
 }
