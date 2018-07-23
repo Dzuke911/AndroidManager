@@ -33,3 +33,54 @@
         display: none;
     }
 }
+
+.job-frame {
+    display: inline-block;
+    vertical-align: top;
+    margin: 5px;
+    border-radius: 20px;
+    border: 2px solid #337ab7;
+    padding: 10px;
+    width: 267px;
+    height: 76px;
+}
+
+.job-description{
+    width:200px;
+    font-size:12px;
+}
+
+.job-btn-edit {
+    display: inline-block;
+    vertical-align: bottom;
+    float: right;
+    margin: 0px;
+    padding: 0px 2px;
+    border-radius: 8px;
+}
+
+.job-btn-delete {
+    float: right;
+    margin: 0px;
+    padding: 0px 2px;
+    border-radius: 8px;
+}
+
+.job-dropdown-button {
+    padding: 2px 4px;
+}
+
+.job-dropdown {
+    display: inline-block;
+    width: 200px;
+}
+
+.job-btn-create {
+    display: inline-block;
+    vertical-align: top;
+    margin: 5px;
+    border-radius: 20px;
+    border: 2px solid #337ab7;
+    width: 267px;
+    height: 76px;
+}

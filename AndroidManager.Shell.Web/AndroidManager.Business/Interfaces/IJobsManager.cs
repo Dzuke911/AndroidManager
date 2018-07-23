@@ -12,5 +12,6 @@ namespace AndroidManager.Business.Interfaces
         Task<JObject> TryCreate(Job job);
         Task<IEnumerable<JObject>> GetJobs();
         Task<JObject> TryUpdate(int id, Job job);
+        Task<bool> TryDelete(int id);
     }
 }

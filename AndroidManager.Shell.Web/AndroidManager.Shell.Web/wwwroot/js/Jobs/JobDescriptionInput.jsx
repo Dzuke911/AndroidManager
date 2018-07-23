@@ -12,6 +12,20 @@
         this.onChange = this.onChange.bind(this);
     }
 
+    componentWillUpdate(nextProps, nextState) {
+        if (this.props.value != nextProps.value) {
+
+            let isValid = false;
+            let msg = this.validate(nextProps.value);
+
+            if (msg === "") {
+                isValid = true;
+            }
+
+            this.setState({ value: nextProps.value, valid: isValid, error: msg });
+        }
+    }
+
     validate(val) {
         if (val.length > 255) {
             return "Description should be less than 255 characters";

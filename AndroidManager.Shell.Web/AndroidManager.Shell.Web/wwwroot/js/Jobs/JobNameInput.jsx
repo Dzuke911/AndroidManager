@@ -8,8 +8,22 @@
             isValid = true;
         }
 
-        this.state = { value: props.value, valid: isValid, error: msg };
+        this.state = { value: props.value, valid: isValid, error: msg};
         this.onChange = this.onChange.bind(this);
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+        if (this.props.value != nextProps.value) {
+
+            let isValid = false;
+            let msg = this.validate(nextProps.value);
+
+            if (msg === "") {
+                isValid = true;
+            }
+
+            this.setState({ value: nextProps.value, valid: isValid, error: msg});
+        }
     }
 
     validate(val) {
@@ -20,7 +34,7 @@
             return "Job name should be less than 16 characters";
         }
 
-        if (/^[a-zA-Z0-9]+$/.test(val) === false) {
+        if (/^[a-zA-Z0-9-]+$/.test(val) === false) {
             return "Job name should contain alphanumeric characters only";
         }
 
@@ -40,6 +54,7 @@
     }
 
     render() {
+
         let formClass = "form-group";
 
         if (this.state.valid === false) {

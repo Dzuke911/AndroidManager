@@ -14,12 +14,13 @@
         let data = { "Name": Name, "Description": Description, "Complexity": Complexity };
 
         this.props.onCreateJob(data);
+        this.props.hideForms(null);
     }
 
     render() {
         return <div className="panel panel-primary">
-            <div className="panel-heading">
-                <h5>Create new job</h5>
+            <div className="panel-heading text-center">
+                <h4>Create new job</h4>
             </div>
             <div className="panel-body">
                 <form onSubmit={this.handleSubmit}>

@@ -20,7 +20,6 @@ namespace AndroidManager.Business.Managers
         }
 
         public async Task<bool> IsJob(string name)
-
         {
             if (await _context.Jobs.FirstOrDefaultAsync(j => j.Name == name) != null)
             {
@@ -28,6 +27,28 @@ namespace AndroidManager.Business.Managers
             }
 
             return false;
+        }
+
+        public async Task<bool> TryDelete(int id)
+        {
+            JobEntity jobEntity = await _context.Jobs.FirstOrDefaultAsync(j => j.Id == id);
+
+            if (jobEntity == null)
+            {
+                return false;
+            }
+
+            await _context.Entry(jobEntity).Collection(j => j.Androids).LoadAsync();
+
+            if(jobEntity.Androids.Count > 0)
+            {
+                return false;
+            }
+
+            _context.Jobs.Remove(jobEntity);
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<JObject> TryCreate(Job job)

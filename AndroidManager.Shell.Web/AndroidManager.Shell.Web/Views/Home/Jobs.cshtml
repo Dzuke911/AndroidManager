@@ -1,10 +1,11 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Jobs";
 }
 
 <span id="GetJobsUrl" style="display:none">@Url.Action("Get", "Jobs")</span>
 <span id="PostJobsUrl" style="display:none">@Url.Action("Post", "Jobs")</span>
 <span id="PutJobsUrl" style="display:none">@Url.Action("Put", "Jobs")</span>
+<span id="DeleteJobsUrl" style="display:none">@Url.Action("Delete", "Jobs")</span>
 <div class="row">
     <div class="col-sm-12">
         <br />
@@ -18,10 +19,12 @@
     <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
     <script src=@Url.Content("~/js/Jobs/Job.jsx")></script>
+    <script src=@Url.Content("~/js/Jobs/CreateJobButton.jsx")></script>
     <script src=@Url.Content("~/js/Jobs/JobComplexityInput.jsx")></script>
     <script src=@Url.Content("~/js/Jobs/JobNameInput.jsx")></script>
     <script src=@Url.Content("~/js/Jobs/JobDescriptionInput.jsx")></script>
     <script src=@Url.Content("~/js/Jobs/CreateJobForm.jsx")></script>
     <script src=@Url.Content("~/js/Jobs/UpdateJobForm.jsx")></script>
+    <script src=@Url.Content("~/js/Jobs/JobsPanelBody.jsx")></script>
     <script src=@Url.Content("~/js/Jobs/JobsPannel.jsx")></script>
 }

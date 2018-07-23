@@ -1,13 +1,13 @@
-﻿class JobsPannel extends React.Component {
+﻿class AndroidsPannel extends React.Component {
 
     constructor(props) {
         super(props);
-        let emptyJob = { "Id": null, "Name": "", "Description": "", "Complexity": 0 };
-        this.state = { jobs: [], editableData: emptyJob , showCreate: false, showUpdate : false};
+        let emptyAndroid = { "Id": null, "Name": "" };
+        this.state = { androids: [], editableData: emptyAndroid , showCreate: false, showUpdate : false};
 
-        this.onCreateJob = this.onCreateJob.bind(this);
-        this.onUpdateJob = this.onUpdateJob.bind(this);
-        this.onDeleteJob = this.onDeleteJob.bind(this);
+        this.onCreateAndroid = this.onCreateAndroid.bind(this);
+        this.onUpdateAndroid = this.onUpdateAndroid.bind(this);
+        this.onDeleteAndroid = this.onDeleteAndroid.bind(this);
         this.setEditableData = this.setEditableData.bind(this);
         this.hideForms = this.hideForms.bind(this);
     }
@@ -17,7 +17,7 @@
         xhr.open("get", this.props.getUrl, true);
         xhr.onload = function () {
             let data = JSON.parse(xhr.responseText);
-            this.setState({ jobs: data });
+            this.setState({ androids: data });
         }.bind(this);
         xhr.send();
     }
@@ -42,10 +42,10 @@
         this.setState({ showCreate: showCreate, showUpdate: showUpdate });
     }
 
-    onCreateJob(job) {
-        if (job) {
+    onCreateAndroid(android) {
+        if (android) {
 
-            let data = JSON.stringify({ "Name": job.Name, "Description": job.Description, "Complexity": job.Complexity });
+            let data = JSON.stringify({ "Name": android.Name });
             let xhr = new XMLHttpRequest();
 
             xhr.open("post", this.props.postUrl, true);
@@ -59,16 +59,16 @@
         }
     }
 
-    setEditableData(job) {
-        if (job) {
-            this.setState({ editableData: job });
+    setEditableData(android) {
+        if (android) {
+            this.setState({ editableData: android });
         }
     }
 
-    onUpdateJob(job) {
-        if (job) {
+    onUpdateAndroid(android) {
+        if (android) {
 
-            let data = JSON.stringify({ "Id": job.Id, "Name": job.Name, "Description": job.Description, "Complexity": job.Complexity });
+            let data = JSON.stringify({ "Id": android.Id, "Name": android.Name });
             let xhr = new XMLHttpRequest();
 
             xhr.open("put", this.props.putUrl, true);
@@ -82,10 +82,10 @@
         }
     }
 
-    onDeleteJob(job) {
-        if (job) {
+    onDeleteAndroid(android) {
+        if (android) {
 
-            let data = JSON.stringify({ "Id": job.Id});
+            let data = JSON.stringify({ "Id": android.Id});
             let xhr = new XMLHttpRequest();
 
             xhr.open("delete", this.props.deleteUrl, true);
@@ -104,17 +104,17 @@
         return <div>
             <div className="panel panel-primary">
                 <div className="panel-heading text-center">
-                    <h3>Jobs</h3>
+                    <h3>Androids</h3>
                 </div>
-                <JobsPanelBody jobs={this.state.jobs} setEditableData={this.setEditableData} hideForms={this.hideForms} onDeleteJob={this.onDeleteJob} />
+                <AndroidsPanelBody androids={this.state.androids} setEditableData={this.setEditableData} hideForms={this.hideForms} onDeleteAndroid={this.onDeleteAndroid} />
             </div>
-            {this.state.showCreate && <CreateJobForm onCreateJob={this.onCreateJob} hideForms={this.hideForms} />}
-            {this.state.showUpdate && <UpdateJobForm onUpdateJob={this.onUpdateJob} hideForms={this.hideForms} editableData={this.state.editableData} />}
+            {this.state.showCreate && <CreateAndroidForm onCreateAndroid={this.onCreateAndroid} hideForms={this.hideForms} />}
+            {this.state.showUpdate && <UpdateAndroidForm onUpdateAndroid={this.onUpdateAndroid} hideForms={this.hideForms} editableData={this.state.editableData} />}
         </div>;
     }
 }
 
 ReactDOM.render(
-    <JobsPannel getUrl={document.getElementById("GetJobsUrl").innerHTML} postUrl={document.getElementById("PostJobsUrl").innerHTML} putUrl={document.getElementById("PutJobsUrl").innerHTML} deleteUrl={document.getElementById("DeleteJobsUrl").innerHTML} />,
-    document.getElementById("JobsPannel")
+    <AndroidsPannel getUrl={document.getElementById("GetAndroidsUrl").innerHTML} postUrl={document.getElementById("PostAndroidsUrl").innerHTML} putUrl={document.getElementById("PutAndroidsUrl").innerHTML} deleteUrl={document.getElementById("DeleteAndroidsUrl").innerHTML} />,
+    document.getElementById("AndroidsPannel")
 );

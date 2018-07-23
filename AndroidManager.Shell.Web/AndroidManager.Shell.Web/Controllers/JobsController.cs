@@ -12,6 +12,7 @@ using AndroidManager.Business.Models;
 
 namespace AndroidManager.Shell.Web.Controllers
 {
+    [Authorize]
     public class JobsController : Controller
     {
         private readonly IJobsManager _jobsManager;
@@ -54,6 +55,19 @@ namespace AndroidManager.Shell.Web.Controllers
             }
 
             return BadRequest(result);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody]JObject obj)
+        {
+            int id = (int)obj.Property("Id");
+
+            if (await _jobsManager.TryDelete(id))
+            {
+                return Ok(true);
+            }
+
+            return BadRequest(false);
         }
     }
 }

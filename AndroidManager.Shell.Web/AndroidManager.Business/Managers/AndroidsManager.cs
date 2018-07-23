@@ -1,7 +1,9 @@
 ﻿using AndroidManager.Business.Enums;
 using AndroidManager.Business.Interfaces;
+using AndroidManager.Business.Models;
 using AndroidManager.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -28,17 +30,62 @@ namespace AndroidManager.Business.Managers
             return false;
         }
 
-        public async Task<bool> TryCreate(string name)
+        public async Task<IEnumerable<JObject>> GetAndroids()
         {
-            if (await IsAndroid(name))
+            List<JObject> ret = new List<JObject>();
+            JArray skills;
+            JObject obj;
+
+            await _context.Androids.LoadAsync();
+
+            foreach (AndroidEntity android in _context.Androids)
             {
-                return false;
+                await _context.Entry(android).Collection(a => a.SkillsToAndroids).LoadAsync();
+
+                skills = new JArray();
+
+                foreach (SkillToAndroidEntity e in android.SkillsToAndroids)
+                {
+                    await _context.Entry(e).Reference(s => s.Skill).LoadAsync();
+                    skills.Add(new JObject(new JProperty("Id", e.Skill.Id), new JProperty("Name", e.Skill.Name)));
+                }
+
+                await _context.Entry(android).Reference(a => a.Job).LoadAsync();
+
+                obj = new JObject(
+                    new JProperty("Id", android.Id),
+                    new JProperty("Name", android.Name),
+                    new JProperty("Job", new JObject(new JProperty("Id", android.Job.Id), new JProperty("Name", android.Job.Name))),
+                    new JProperty("Reliability", android.Reliability),
+                    new JProperty("Status", android.Status),
+                    new JProperty("Skills", skills)
+                    );
+                ret.Add(obj);
             }
 
-            await _context.Androids.AddAsync(new AndroidEntity { Name = name, Reliability = 10, Status = true });
+            return ret;
+        }
+
+        public async Task<JObject> TryCreate(Android android)
+        {
+            if (await IsAndroid(android.Name) || !android.IsValid)
+            {
+                return null;
+            }
+
+            AndroidEntity androidEntity = new AndroidEntity { Name = android.Name, Reliability = 10, Status = true };
+            JobEntity job = await _context.Jobs.FirstOrDefaultAsync(j => j.Id == android.JobId);
+
+            if(job == null)
+            {
+                return null;
+            }
+
+            androidEntity.Job = job;
+            await _context.Androids.AddAsync(androidEntity);
             await _context.SaveChangesAsync();
 
-            return true;
+            return android.ToJson(androidEntity.Id);
         }
 
         public async Task<SkillResult> TryAddSkill(string androidName, string skillName)
