@@ -73,7 +73,16 @@ namespace AndroidManager.Business.Managers
                 return null;
             }
 
+            foreach (Skill s in android.Skills)
+            {
+                if (!s.IsValid)
+                {
+                    return null;
+                }
+            }
+
             AndroidEntity androidEntity = new AndroidEntity { Name = android.Name, Reliability = 10, Status = true };
+
             JobEntity job = await _context.Jobs.FirstOrDefaultAsync(j => j.Id == android.JobId);
 
             if (job == null)
@@ -82,7 +91,27 @@ namespace AndroidManager.Business.Managers
             }
 
             androidEntity.Job = job;
+
+            SkillEntity skillEntity;
+            List<SkillToAndroidEntity> StoAs = new List<SkillToAndroidEntity>();
+
+            foreach (Skill s in android.Skills)
+            {
+                skillEntity = await _context.Skills.FirstOrDefaultAsync(e => e.Name == s.Name);
+                StoAs.Add( new SkillToAndroidEntity { Skill = skillEntity , Android = androidEntity});               
+            }
+
             await _context.Androids.AddAsync(androidEntity);
+            await _context.SaveChangesAsync();
+
+            await _context.Entry(androidEntity).Collection(a => a.SkillsToAndroids).LoadAsync();
+
+            foreach (SkillToAndroidEntity s in StoAs)
+            {
+                androidEntity.SkillsToAndroids.Add(s);
+            }
+
+            _context.Update(androidEntity);
             await _context.SaveChangesAsync();
 
             return android.ToJson(androidEntity.Id);
@@ -213,6 +242,34 @@ namespace AndroidManager.Business.Managers
             }
 
             androidEntity.Name = android.Name;
+
+            List<SkillEntity> skillEntities = new List<SkillEntity>();
+            SkillEntity currEntity;
+
+            foreach (Skill s in android.Skills)
+            {
+                if (!s.IsValid)
+                {
+                    return null;                    
+                }
+
+                currEntity = await _context.Skills.FirstOrDefaultAsync(e => e.Name == s.Name);
+
+                if(currEntity == null)
+                {
+                    return null;
+                }
+
+                skillEntities.Add(currEntity);
+            }
+
+            await _context.Entry(androidEntity).Collection(a => a.SkillsToAndroids).LoadAsync();
+
+            androidEntity.SkillsToAndroids.Clear();
+            foreach(SkillEntity e in skillEntities)
+            {
+                androidEntity.SkillsToAndroids.Add(new SkillToAndroidEntity { Android = androidEntity, Skill = e });
+            }            
 
             _context.Update(androidEntity);
             await _context.SaveChangesAsync();

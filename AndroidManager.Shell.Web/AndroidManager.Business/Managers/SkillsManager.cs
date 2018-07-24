@@ -1,4 +1,5 @@
 ﻿using AndroidManager.Business.Interfaces;
+using AndroidManager.Business.Models;
 using AndroidManager.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
@@ -29,14 +30,14 @@ namespace AndroidManager.Business.Managers
             return false;
         }
 
-        public async Task<bool> TryCreate(string name)
+        public async Task<bool> TryCreate(Skill skill)
         {
-            if(await IsSkill(name))
+            if(!skill.IsValid || await IsSkill(skill.Name))
             {
                 return false;
             }
 
-            await _context.Skills.AddAsync(new SkillEntity { Name = name });
+            await _context.Skills.AddAsync(new SkillEntity { Name = skill.Name });
             await _context.SaveChangesAsync();
 
             return true;

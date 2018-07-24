@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using AndroidManager.Business.Models;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,7 +9,7 @@ namespace AndroidManager.Business.Interfaces
 {
     public interface ISkillsManager
     {
-        Task<bool> TryCreate(string name);
+        Task<bool> TryCreate(Skill skill);
         Task<JArray> GetSkills();
     }
 }

@@ -41,7 +41,20 @@ namespace AndroidManager.Shell.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]JObject android)
         {
-            Android newAndroid = new Android((string)android.Property("Name"), (int)android.Property("JobId"));
+            IEnumerable<string> sk = android.Value<JArray>("Skills").Values<string>(); ;
+
+            Skill currSkill;
+            List<Skill> skills = new List<Skill>();
+
+            foreach(string name in sk)
+            {               
+                currSkill = new Skill(name);
+                await _skillsManager.TryCreate(currSkill);
+                skills.Add(currSkill);
+            }
+
+            Android newAndroid = new Android((string)android.Property("Name"), (int)android.Property("JobId"), skills.ToArray());
+
             JObject result = await _androidsManager.TryCreate(newAndroid);
 
             if (result != null)
@@ -55,7 +68,19 @@ namespace AndroidManager.Shell.Web.Controllers
         [HttpPut]
         public async Task<IActionResult> Put([FromBody]JObject android)
         {
-            Android newAndroid = new Android((string)android.Property("Name"), (int)android.Property("JobId"));
+            IEnumerable<string> sk = android.Value<JArray>("Skills").Values<string>(); ;
+
+            Skill currSkill;
+            List<Skill> skills = new List<Skill>();
+
+            foreach (string name in sk)
+            {
+                currSkill = new Skill(name);
+                await _skillsManager.TryCreate(currSkill);
+                skills.Add(currSkill);
+            }
+
+            Android newAndroid = new Android((string)android.Property("Name"), (int)android.Property("JobId"), skills.ToArray());
             JObject result = await _androidsManager.TryUpdate((int)android.Property("Id"), newAndroid);
 
             if (result != null)

@@ -10,11 +10,13 @@ namespace AndroidManager.Business.Models
     {
         public readonly string Name;
         public readonly int JobId;
+        public readonly Skill[] Skills;
 
         public readonly bool IsValid = true;
 
-        public Android(string name, int jobId)
+        public Android(string name, int jobId, params Skill[] skills)
         {
+            Skills = skills;
             Name = name;
             JobId = jobId;
 
@@ -25,6 +27,20 @@ namespace AndroidManager.Business.Models
             else if(!Regex.IsMatch(name, "^[a-zA-Z0-9-]+$"))
             {
                 IsValid = false;
+            }
+
+            for(int i = 0; i< skills.Length; i++)
+            {
+                for (int j = 0; j < skills.Length; j++)
+                {
+                    if(i != j)
+                    {
+                        if(skills[i].Name == skills[j].Name)
+                        {
+                            IsValid = false;
+                        }
+                    }
+                }
             }
         }
 

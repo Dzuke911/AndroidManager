@@ -58,8 +58,6 @@
 
     render() {
 
-        console.log(this.props.skills);
-
         return <div className="panel panel-primary">
             <div className="panel-heading text-center">
                 <h4>Create new android</h4>

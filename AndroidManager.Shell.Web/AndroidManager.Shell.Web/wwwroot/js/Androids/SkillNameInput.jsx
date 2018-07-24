@@ -70,7 +70,7 @@
 
         return <div>
             <div className={formClass}>
-                <span className="input-group-addon">Skill name:</span>
+                <span className="input-group-addon">New skill:</span>
                 <input type="text" className="form-control" value={this.state.value} onChange={this.onChange} list="skills" />
                 <datalist id="skills">
                     {SkillElems}

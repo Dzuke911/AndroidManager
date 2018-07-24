@@ -67,7 +67,9 @@
     onCreateAndroid(android) {
         if (android) {
 
-            let data = JSON.stringify({ "Name": android.Name, "JobId": android.JobId });
+            console.log(android.Skills);
+
+            let data = JSON.stringify({ "Name": android.Name, "JobId": android.JobId, "Skills": android.Skills });
             let xhr = new XMLHttpRequest();
 
             xhr.open("post", this.props.postUrl, true);
@@ -90,7 +92,7 @@
     onUpdateAndroid(android) {
         if (android) {
 
-            let data = JSON.stringify({ "Id": android.Id, "Name": android.Name, "JobId": android.JobId });
+            let data = JSON.stringify({ "Id": android.Id, "Name": android.Name, "JobId": android.JobId, "Skills": android.Skills });
             let xhr = new XMLHttpRequest();
 
             xhr.open("put", this.props.putUrl, true);

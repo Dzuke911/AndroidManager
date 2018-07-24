@@ -1,4 +1,4 @@
-﻿class Android extends React.Component {
+﻿class Skill extends React.Component {
 
     constructor(props) {
         super(props);
@@ -36,8 +36,8 @@
     render() {
 
         return <div className="skill-frame">
-            <label>{this.state.data.Name}</label>
-            <button className="btn btn-danger job-btn-delete" onClick={this.onDelete} data-toggle="tooltip" title="Delete skill"><span className="glyphicon glyphicon-remove"></span></button>
+            <label>{this.state.data}</label>
+            <button type="button" className="btn btn-danger job-btn-delete" onClick={this.onDelete} data-toggle="tooltip" title="Delete skill"><span className="glyphicon glyphicon-remove"></span></button>
         </div>;
     }
 }

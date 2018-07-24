@@ -23,24 +23,25 @@
         this.props.hideForms("Update");
     }
 
-    //getTooltip() {
+    getTooltip() {
 
-    //    let dropdownList = [];
-    //    let androids = this.state.data.Androids;
-    //    if (androids.length == 0) {
-    //        dropdownList.push(<span key={0} className="dropdown-item">No androids assigned</span>);
-    //        return dropdownList;
-    //    }
-    //    for (let i = 0; i < androids.length; i++) {
-    //        dropdownList.push(<span key={i} className="dropdown-item">{androids[i].Name}</span>);
-    //    }
+        let dropdownList = [];
+        let skills = this.state.data.Skills;
 
-    //    return dropdownList;
-    //}
+        if (skills.length == 0) {
+            dropdownList.push(<span key={0} className="dropdown-item">No skills</span>);
+            return dropdownList;
+        }
+        for (let i = 0; i < skills.length; i++) {
+            dropdownList.push(<div key={i} className="dropdown-item">{skills[i].Name}</div>);
+        }
+
+        return dropdownList;
+    }
 
     render() {
 
-        //let dropdownList = this.getTooltip();
+        let dropdownList = this.getTooltip();
 
         let frameClass = "android-frame";
         let reliability = this.state.data.Reliability;
@@ -58,8 +59,9 @@
             <div><b>Reliability: </b>{reliability}</div>
             <button className="btn btn-primary job-btn-edit" onClick={this.onEdit} data-toggle="tooltip" title="Edit android"><span className="glyphicon glyphicon-edit"></span></button>
             <div className="dropdown job-dropdown">
-                <button type="button" className="btn btn-primary dropdown-toggle job-dropdown-button" data-toggle="dropdown">Androids assigned</button>
+                <button type="button" className="btn btn-primary dropdown-toggle job-dropdown-button" data-toggle="dropdown">Skills</button>
                 <div className="dropdown-menu">
+                    {dropdownList}
                 </div>
             </div>
         </div>;
