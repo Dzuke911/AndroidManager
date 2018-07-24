@@ -28,14 +28,14 @@
 
     validate(val) {
         if (val.length < 5) {
-            return "Job name should be 5 characters at least";
+            return "Android name should be 5 characters at least";
         }
         if (val.length > 24) {
-            return "Job name should be less than 16 characters";
+            return "Android name should be less than 24 characters";
         }
 
         if (/^[a-zA-Z0-9-]+$/.test(val) === false) {
-            return "Job name should contain alphanumeric characters only";
+            return "Android name should contain alphanumeric characters only";
         }
 
         return "";

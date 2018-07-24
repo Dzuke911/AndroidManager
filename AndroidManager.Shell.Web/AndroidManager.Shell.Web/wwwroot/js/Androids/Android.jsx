@@ -42,17 +42,19 @@
 
         //let dropdownList = this.getTooltip();
 
-        let frameClass = "job-frame";
+        let frameClass = "android-frame";
         let reliability = this.state.data.Reliability;
 
         if (reliability <= 0) {
             reliability = "Should be reclaimed";
+            frameClass += " should-reclaimed";
         }
 
         return <div className={frameClass} data-toggle="tooltip" title={this.state.data.Description}>
             <label>{this.state.data.Name}</label>            
             <button className="btn btn-danger job-btn-delete" onClick={this.onDelete} data-toggle="tooltip" title="Delete android"><span className="glyphicon glyphicon-remove"></span></button>
             <br />
+            <div><b>Job: </b>{this.state.data.Job.Name}</div>
             <div><b>Reliability: </b>{reliability}</div>
             <button className="btn btn-primary job-btn-edit" onClick={this.onEdit} data-toggle="tooltip" title="Edit android"><span className="glyphicon glyphicon-edit"></span></button>
             <div className="dropdown job-dropdown">

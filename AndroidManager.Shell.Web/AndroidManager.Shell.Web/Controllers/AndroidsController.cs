@@ -17,18 +17,25 @@ namespace AndroidManager.Shell.Web.Controllers
     {
         private readonly IAndroidsManager _androidsManager;
         private readonly IJobsManager _jobsManager;
+        private readonly ISkillsManager _skillsManager;
 
-        public AndroidsController(IAndroidsManager androidsManager, IJobsManager jobsManager)
+        public AndroidsController(IAndroidsManager androidsManager, IJobsManager jobsManager, ISkillsManager skillsManager)
         {
             _androidsManager = androidsManager;
             _jobsManager = jobsManager;
+            _skillsManager = skillsManager;
         }
 
         [HttpGet]
         public async Task<IEnumerable<JObject>> Get()
         {
-            IEnumerable<JObject> ret = await _androidsManager.GetAndroids();
-            return ret;
+            return await _androidsManager.GetAndroids();
+        }
+
+        [HttpGet]
+        public async Task<JArray> Skills()
+        {
+            return await _skillsManager.GetSkills();
         }
 
         [HttpPost]

@@ -3,7 +3,7 @@
     constructor(props) {
         super(props);
         let emptyAndroid = { "Id": null, "Name": "" };
-        this.state = { androids: [], jobs:[], editableData: emptyAndroid , showCreate: false, showUpdate : false};
+        this.state = { androids: [], jobs:[],skills:[], editableData: emptyAndroid , showCreate: false, showUpdate : false};
 
         this.onCreateAndroid = this.onCreateAndroid.bind(this);
         this.onUpdateAndroid = this.onUpdateAndroid.bind(this);
@@ -32,7 +32,18 @@
         xhr.send();
     }
 
+    loadSkillsData() {
+        let xhr = new XMLHttpRequest();
+        xhr.open("get", this.props.getSkillsUrl, true);
+        xhr.onload = function () {
+            let data = JSON.parse(xhr.responseText);
+            this.setState({ skills: data });
+        }.bind(this);
+        xhr.send();
+    }
+
     componentDidMount() {
+        this.loadSkillsData();
         this.loadJobsData();
         this.loadData();
     }
@@ -119,13 +130,13 @@
                 </div>
                 <AndroidsPanelBody androids={this.state.androids} setEditableData={this.setEditableData} hideForms={this.hideForms} onDeleteAndroid={this.onDeleteAndroid} />
             </div>
-            {this.state.showCreate && <CreateAndroidForm onCreateAndroid={this.onCreateAndroid} jobs={this.state.jobs} hideForms={this.hideForms} />}
-            {this.state.showUpdate && <UpdateAndroidForm onUpdateAndroid={this.onUpdateAndroid} jobs={this.state.jobs} hideForms={this.hideForms} editableData={this.state.editableData} />}
+            {this.state.showCreate && <CreateAndroidForm onCreateAndroid={this.onCreateAndroid} jobs={this.state.jobs} skills={this.state.skills} hideForms={this.hideForms} />}
+            {this.state.showUpdate && <UpdateAndroidForm onUpdateAndroid={this.onUpdateAndroid} jobs={this.state.jobs} skills={this.state.skills} hideForms={this.hideForms} editableData={this.state.editableData} />}
         </div>;
     }
 }
 
 ReactDOM.render(
-    <AndroidsPannel getUrl={document.getElementById("GetAndroidsUrl").innerHTML} postUrl={document.getElementById("PostAndroidsUrl").innerHTML} putUrl={document.getElementById("PutAndroidsUrl").innerHTML} deleteUrl={document.getElementById("DeleteAndroidsUrl").innerHTML} getJobsUrl={document.getElementById("GetJobsUrl").innerHTML}/>,
+    <AndroidsPannel getUrl={document.getElementById("GetAndroidsUrl").innerHTML} postUrl={document.getElementById("PostAndroidsUrl").innerHTML} putUrl={document.getElementById("PutAndroidsUrl").innerHTML} deleteUrl={document.getElementById("DeleteAndroidsUrl").innerHTML} getJobsUrl={document.getElementById("GetJobsUrl").innerHTML} getSkillsUrl={document.getElementById("GetSkillsUrl").innerHTML}/>,
     document.getElementById("AndroidsPannel")
 );

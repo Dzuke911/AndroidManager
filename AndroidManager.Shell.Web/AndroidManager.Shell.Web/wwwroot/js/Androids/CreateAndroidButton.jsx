@@ -11,9 +11,9 @@
     }
 
     render() {
-        return <button className="btn btn-primary job-btn-create" onClick={this.onClick}>
+        return <button className="btn btn-primary android-btn-create" onClick={this.onClick}>
             <div>Create new android</div>
-            <div><span className="glyphicon glyphicon-plus-sign" style={{ fontSize: '2.0em'}}></span></div>
+            <div><span className="glyphicon glyphicon-plus-sign" style={{ fontSize: '4.0em'}}></span></div>
         </button>
     }
 }

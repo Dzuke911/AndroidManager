@@ -1,6 +1,7 @@
 ﻿using AndroidManager.Business.Interfaces;
 using AndroidManager.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,20 @@ namespace AndroidManager.Business.Managers
             await _context.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<JArray> GetSkills()
+        {
+            JArray ret = new JArray();
+
+            await _context.Skills.LoadAsync();
+
+            foreach (SkillEntity skill in _context.Skills)
+            {
+                ret.Add(skill.Name);
+            }
+
+            return ret;
         }
     }
 }
