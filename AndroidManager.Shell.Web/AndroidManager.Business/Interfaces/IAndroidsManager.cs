@@ -1,5 +1,6 @@
 ﻿using AndroidManager.Business.Enums;
 using AndroidManager.Business.Models;
+using AndroidManager.Data.Models;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace AndroidManager.Business.Interfaces
 
         Task<JObject> TryCreate(Android android);
         Task<SkillResult> TryAddSkill(string androidName, string skillName);
+        Task<bool> TryDelete(int id);
         Task<AssignResult> TryAssignJob(string androidName, string jobName);
+        Task<JObject> TryUpdate(int id, Android job);
     }
 }

@@ -76,7 +76,7 @@ namespace AndroidManager.Business.Managers
             AndroidEntity androidEntity = new AndroidEntity { Name = android.Name, Reliability = 10, Status = true };
             JobEntity job = await _context.Jobs.FirstOrDefaultAsync(j => j.Id == android.JobId);
 
-            if(job == null)
+            if (job == null)
             {
                 return null;
             }
@@ -106,9 +106,9 @@ namespace AndroidManager.Business.Managers
 
             await _context.Entry(android).Collection(a => a.SkillsToAndroids).LoadAsync();
 
-            foreach(SkillToAndroidEntity r in android.SkillsToAndroids)
+            foreach (SkillToAndroidEntity r in android.SkillsToAndroids)
             {
-                if(r.Skill.Name == skillName)
+                if (r.Skill.Name == skillName)
                 {
                     return SkillResult.AlreadyHadSkill;
                 }
@@ -132,12 +132,12 @@ namespace AndroidManager.Business.Managers
 
             AndroidEntity android = await _context.Androids.FirstOrDefaultAsync(a => a.Name == jobName);
 
-            if(android == null)
+            if (android == null)
             {
                 return AssignResult.AndroidNotExists;
             }
 
-            if(android.Job == job)
+            if (android.Job == job)
             {
                 return AssignResult.AlreadyThisJob;
             }
@@ -159,6 +159,65 @@ namespace AndroidManager.Business.Managers
             await _context.SaveChangesAsync();
 
             return AssignResult.Success;
+        }
+
+        public async Task<bool> TryDelete(int id)
+        {
+            AndroidEntity android = await _context.Androids.FirstOrDefaultAsync(a => a.Id == id);
+
+            if (android == null)
+            {
+                return false;
+            }
+
+            _context.Androids.Remove(android);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<JObject> TryUpdate(int id, Android android)
+        {
+            if (!android.IsValid)
+            {
+                return null;
+            }
+
+            AndroidEntity androidEntity = await _context.Androids.SingleOrDefaultAsync(a => a.Id == id);
+
+            if (androidEntity == null)
+            {
+                return null;
+            }
+
+            if (androidEntity.Reliability > 0)
+            {
+                JobEntity job = await _context.Jobs.SingleOrDefaultAsync(j => j.Id == android.JobId);
+
+                if (job == null)
+                {
+                    return null;
+                }
+
+                if (job != androidEntity.Job)
+                {
+                    androidEntity.Reliability--;
+
+                    if (androidEntity.Reliability <= 0)
+                    {
+                        androidEntity.Status = false;
+                    }
+
+                    androidEntity.Job = job;
+                }
+            }
+
+            androidEntity.Name = android.Name;
+
+            _context.Update(androidEntity);
+            await _context.SaveChangesAsync();
+
+            return android.ToJson(androidEntity.Id);
         }
     }
 }

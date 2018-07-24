@@ -34,7 +34,7 @@ namespace AndroidManager.Shell.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]JObject android)
         {
-            Android newAndroid = new Android((string)android.Property("Name"),1);
+            Android newAndroid = new Android((string)android.Property("Name"), (int)android.Property("JobId"));
             JObject result = await _androidsManager.TryCreate(newAndroid);
 
             if (result != null)
@@ -45,31 +45,31 @@ namespace AndroidManager.Shell.Web.Controllers
             return BadRequest(result);
         }
 
-        //[HttpPut]
-        //public async Task<IActionResult> Put([FromBody]JObject android)
-        //{
-        //    Android newAndroid = new Android((string)android.Property("Name"), (string)android.Property("Description"), (int)android.Property("Complexity"));
-        //    JObject result = await _androidsManager.TryUpdate((int)android.Property("Id"),newAndroid);
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody]JObject android)
+        {
+            Android newAndroid = new Android((string)android.Property("Name"), (int)android.Property("JobId"));
+            JObject result = await _androidsManager.TryUpdate((int)android.Property("Id"), newAndroid);
 
-        //    if (result != null)
-        //    {
-        //        return Ok(result);
-        //    }
+            if (result != null)
+            {
+                return Ok(result);
+            }
 
-        //    return BadRequest(result);
-        //}
+            return BadRequest(result);
+        }
 
-        //[HttpDelete]
-        //public async Task<IActionResult> Delete([FromBody]JObject obj)
-        //{
-        //    int id = (int)obj.Property("Id");
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody]JObject obj)
+        {
+            int id = (int)obj.Property("Id");
 
-        //    if (await _androidsManager.TryDelete(id))
-        //    {
-        //        return Ok(true);
-        //    }
+            if (await _androidsManager.TryDelete(id))
+            {
+                return Ok(true);
+            }
 
-        //    return BadRequest(false);
-        //}
+            return BadRequest(false);
+        }
     }
 }

@@ -8,8 +8,9 @@
     handleSubmit(e) {
         e.preventDefault();
         let Name = this.refs.androidNameInput.state.value;
+        let JobId = this.refs.androidJobInput.state.value;
 
-        let data = { "Name": Name };
+        let data = { "Name": Name, "JobId": JobId };
 
         this.props.onCreateAndroid(data);
         this.props.hideForms(null);
@@ -23,6 +24,7 @@
             <div className="panel-body">
                 <form onSubmit={this.handleSubmit}>
                     <AndroidNameInput value="newAndroid" ref="androidNameInput" />
+                    <AndroidJobInput value={this.props.jobs[0].Id} jobs={this.props.jobs} ref="androidJobInput" />
                     <input type="submit" className="btn btn-primary form-control" value="Submit" />
                 </form>
             </div>

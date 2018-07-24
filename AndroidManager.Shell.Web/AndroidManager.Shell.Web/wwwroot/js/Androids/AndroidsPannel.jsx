@@ -3,7 +3,7 @@
     constructor(props) {
         super(props);
         let emptyAndroid = { "Id": null, "Name": "" };
-        this.state = { androids: [], editableData: emptyAndroid , showCreate: false, showUpdate : false};
+        this.state = { androids: [], jobs:[], editableData: emptyAndroid , showCreate: false, showUpdate : false};
 
         this.onCreateAndroid = this.onCreateAndroid.bind(this);
         this.onUpdateAndroid = this.onUpdateAndroid.bind(this);
@@ -22,7 +22,18 @@
         xhr.send();
     }
 
+    loadJobsData() {
+        let xhr = new XMLHttpRequest();
+        xhr.open("get", this.props.getJobsUrl, true);
+        xhr.onload = function () {
+            let data = JSON.parse(xhr.responseText);
+            this.setState({ jobs: data });
+        }.bind(this);
+        xhr.send();
+    }
+
     componentDidMount() {
+        this.loadJobsData();
         this.loadData();
     }
 
@@ -45,7 +56,7 @@
     onCreateAndroid(android) {
         if (android) {
 
-            let data = JSON.stringify({ "Name": android.Name });
+            let data = JSON.stringify({ "Name": android.Name, "JobId": android.JobId });
             let xhr = new XMLHttpRequest();
 
             xhr.open("post", this.props.postUrl, true);
@@ -68,7 +79,7 @@
     onUpdateAndroid(android) {
         if (android) {
 
-            let data = JSON.stringify({ "Id": android.Id, "Name": android.Name });
+            let data = JSON.stringify({ "Id": android.Id, "Name": android.Name, "JobId": android.JobId });
             let xhr = new XMLHttpRequest();
 
             xhr.open("put", this.props.putUrl, true);
@@ -108,13 +119,13 @@
                 </div>
                 <AndroidsPanelBody androids={this.state.androids} setEditableData={this.setEditableData} hideForms={this.hideForms} onDeleteAndroid={this.onDeleteAndroid} />
             </div>
-            {this.state.showCreate && <CreateAndroidForm onCreateAndroid={this.onCreateAndroid} hideForms={this.hideForms} />}
-            {this.state.showUpdate && <UpdateAndroidForm onUpdateAndroid={this.onUpdateAndroid} hideForms={this.hideForms} editableData={this.state.editableData} />}
+            {this.state.showCreate && <CreateAndroidForm onCreateAndroid={this.onCreateAndroid} jobs={this.state.jobs} hideForms={this.hideForms} />}
+            {this.state.showUpdate && <UpdateAndroidForm onUpdateAndroid={this.onUpdateAndroid} jobs={this.state.jobs} hideForms={this.hideForms} editableData={this.state.editableData} />}
         </div>;
     }
 }
 
 ReactDOM.render(
-    <AndroidsPannel getUrl={document.getElementById("GetAndroidsUrl").innerHTML} postUrl={document.getElementById("PostAndroidsUrl").innerHTML} putUrl={document.getElementById("PutAndroidsUrl").innerHTML} deleteUrl={document.getElementById("DeleteAndroidsUrl").innerHTML} />,
+    <AndroidsPannel getUrl={document.getElementById("GetAndroidsUrl").innerHTML} postUrl={document.getElementById("PostAndroidsUrl").innerHTML} putUrl={document.getElementById("PutAndroidsUrl").innerHTML} deleteUrl={document.getElementById("DeleteAndroidsUrl").innerHTML} getJobsUrl={document.getElementById("GetJobsUrl").innerHTML}/>,
     document.getElementById("AndroidsPannel")
 );
