@@ -8,6 +8,7 @@
 <span id="DeleteAndroidsUrl" style="display:none">@Url.Action("Delete", "Androids")</span>
 <span id="GetJobsUrl" style="display:none">@Url.Action("Get", "Jobs")</span>
 <span id="GetSkillsUrl" style="display:none">@Url.Action("Skills", "Androids")</span>
+<span id="AddImageUrl" style="display:none">@Url.Action("AddImage", "Androids")</span>
 <div class="row">
     <div class="col-sm-12">
         <br />
@@ -20,11 +21,13 @@
 @section Scripts{
     <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src=@Url.Content("~/js/Androids/Skill.jsx")></script>
     <script src=@Url.Content("~/js/Androids/Android.jsx")></script>
     <script src=@Url.Content("~/js/Androids/CreateAndroidButton.jsx")></script>
     <script src=@Url.Content("~/js/Androids/SkillNameInput.jsx")></script>
     <script src=@Url.Content("~/js/Androids/AddSkillPanel.jsx")></script>
+    <script src=@Url.Content("~/js/Androids/AndroidAvatarInput.jsx")></script>
     <script src=@Url.Content("~/js/Androids/AndroidNameInput.jsx")></script>
     <script src=@Url.Content("~/js/Androids/AndroidJobInput.jsx")></script>
     <script src=@Url.Content("~/js/Androids/CreateAndroidForm.jsx")></script>

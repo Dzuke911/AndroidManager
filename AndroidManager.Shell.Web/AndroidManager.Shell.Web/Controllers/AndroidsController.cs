@@ -41,6 +41,7 @@ namespace AndroidManager.Shell.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]JObject android)
         {
+
             IEnumerable<string> sk = android.Value<JArray>("Skills").Values<string>(); ;
 
             Skill currSkill;
@@ -102,6 +103,15 @@ namespace AndroidManager.Shell.Web.Controllers
             }
 
             return BadRequest(false);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddImage([FromBody]JObject obj)
+        {
+            var file = obj.Property("File");
+            var name = obj.Property("Name");
+
+            return Ok(true);
         }
     }
 }

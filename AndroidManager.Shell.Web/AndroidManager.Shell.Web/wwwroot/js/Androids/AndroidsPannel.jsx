@@ -3,7 +3,7 @@
     constructor(props) {
         super(props);
         let emptyAndroid = { "Id": null, "Name": "" };
-        this.state = { androids: [], jobs:[],skills:[], editableData: emptyAndroid , showCreate: false, showUpdate : false};
+        this.state = { androids: [], jobs:[],skills:[], editableData: emptyAndroid , showCreate: false, showUpdate : false, selectedAvatar: undefined};
 
         this.onCreateAndroid = this.onCreateAndroid.bind(this);
         this.onUpdateAndroid = this.onUpdateAndroid.bind(this);
@@ -67,9 +67,10 @@
     onCreateAndroid(android) {
         if (android) {
 
-            console.log(android.Skills);
+            console.log(android.Avatar);
 
-            let data = JSON.stringify({ "Name": android.Name, "JobId": android.JobId, "Skills": android.Skills });
+            let data = JSON.stringify({ "Name": android.Name, "JobId": android.JobId, "Skills": android.Skills, "Avatar": android.Avatar });
+
             let xhr = new XMLHttpRequest();
 
             xhr.open("post", this.props.postUrl, true);
@@ -139,6 +140,6 @@
 }
 
 ReactDOM.render(
-    <AndroidsPannel getUrl={document.getElementById("GetAndroidsUrl").innerHTML} postUrl={document.getElementById("PostAndroidsUrl").innerHTML} putUrl={document.getElementById("PutAndroidsUrl").innerHTML} deleteUrl={document.getElementById("DeleteAndroidsUrl").innerHTML} getJobsUrl={document.getElementById("GetJobsUrl").innerHTML} getSkillsUrl={document.getElementById("GetSkillsUrl").innerHTML}/>,
+    <AndroidsPannel getUrl={document.getElementById("GetAndroidsUrl").innerHTML} postUrl={document.getElementById("PostAndroidsUrl").innerHTML} putUrl={document.getElementById("PutAndroidsUrl").innerHTML} deleteUrl={document.getElementById("DeleteAndroidsUrl").innerHTML} getJobsUrl={document.getElementById("GetJobsUrl").innerHTML} getSkillsUrl={document.getElementById("GetSkillsUrl").innerHTML} addImageUrl={document.getElementById("AddImageUrl").innerHTML}/>,
     document.getElementById("AndroidsPannel")
 );

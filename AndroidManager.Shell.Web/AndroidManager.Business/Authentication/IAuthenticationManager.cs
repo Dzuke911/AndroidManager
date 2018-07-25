@@ -11,5 +11,6 @@ namespace AndroidManager.Business.Authentication
         Task<SignInResult> PasswordSignInAsync(string email, string password, bool rememberMe);
         Task SignInAsync(string email);
         Task<IdentityResult> CreateNewUserAsync(string email, string password);
+        Task SignOutAsync();
     }
 }

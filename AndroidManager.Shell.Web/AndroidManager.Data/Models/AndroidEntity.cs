@@ -18,7 +18,7 @@ namespace AndroidManager.Data.Models
         public string Name { get; set; }
 
         [Column("Avatar")]
-        public string Avatar { get; set; }
+        public byte[] Avatar { get; set; }
 
         [Required]
         [Column("Reliability")]

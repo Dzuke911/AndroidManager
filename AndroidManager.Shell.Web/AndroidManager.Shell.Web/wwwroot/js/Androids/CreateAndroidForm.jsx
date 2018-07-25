@@ -13,10 +13,11 @@
         e.preventDefault();
         let Name = this.refs.androidNameInput.state.value;
         let JobId = this.refs.androidJobInput.state.value;
+        let Avatar = this.refs.androidAvatarInput.state.value;
 
         let Skills = this.state.currentSkills;
 
-        let data = { "Name": Name, "JobId": JobId , "Skills" : Skills};
+        let data = { "Name": Name, "JobId": JobId , "Skills" : Skills, "Avatar" : Avatar};
 
         this.props.onCreateAndroid(data);
         this.props.hideForms(null);
@@ -67,6 +68,7 @@
                     <div className="col-sm-8">
                         <AndroidNameInput value="newAndroid" ref="androidNameInput" />
                         <AndroidJobInput value={this.props.jobs[0].Id} jobs={this.props.jobs} ref="androidJobInput" />
+                        <AndroidAvatarInput value="" ref="androidAvatarInput" />
                     </div>
                     <div className="col-sm-4">
                         <AddSkillPanel allSkills={this.props.skills} onAddSkill={this.addSkill} onRemoveSkill={this.removeSkill} currentSkills={this.state.currentSkills} />
