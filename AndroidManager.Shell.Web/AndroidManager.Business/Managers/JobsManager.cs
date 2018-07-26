@@ -29,57 +29,42 @@ namespace AndroidManager.Business.Managers
             return false;
         }
 
-        public async Task<bool> TryDelete(int id)
+        public async Task<Result> TryDelete(int id)
         {
             JobEntity jobEntity = await _context.Jobs.FirstOrDefaultAsync(j => j.Id == id);
 
-            if (jobEntity == null)
-            {
-                return false;
-            }
+            if (jobEntity == null) { return new Result(false, "There is no job with current id"); }
 
             await _context.Entry(jobEntity).Collection(j => j.Androids).LoadAsync();
 
-            if(jobEntity.Androids.Count > 0)
-            {
-                return false;
-            }
+            if (jobEntity.Androids.Count > 0) { return new Result(false, "Can`t delete job with androids assigned"); }
 
             _context.Jobs.Remove(jobEntity);
             await _context.SaveChangesAsync();
 
-            return true;
+            return new Result(true);
         }
 
-        public async Task<JObject> TryCreate(Job job)
+        public async Task<Result> TryCreate(Job job)
         {
-
-            if (!job.IsValid || await IsJob(job.Name))
-            {
-                return null;
-            }
+            if (!job.IsValid) { return new Result(false, "Job wasn`t created"); }
+            if (await IsJob(job.Name)) { return new Result(false, "Job with this name already exists"); }
 
             JobEntity jobEntity = new JobEntity { Name = job.Name, Description = job.Description, Complexity = job.Complexity };
 
             await _context.Jobs.AddAsync(jobEntity);
             await _context.SaveChangesAsync();
 
-            return job.ToJson(jobEntity.Id);
+            return new Result(true);
         }
 
-        public async Task<JObject> TryUpdate(int id, Job job)
+        public async Task<Result> TryUpdate(int id, Job job)
         {
-            if(!job.IsValid)
-            {
-                return null;
-            }
+            if(!job.IsValid) { return new Result(false, "Job wasn`t updated"); }
 
             JobEntity jobEntity = await _context.Jobs.SingleOrDefaultAsync(j => j.Id == id);
 
-            if(jobEntity == null)
-            {
-                return null;
-            }
+            if(jobEntity == null) { return new Result(false, "There is no job with current id"); }
 
             jobEntity.Name = job.Name;
             jobEntity.Description = job.Description;
@@ -88,7 +73,7 @@ namespace AndroidManager.Business.Managers
             _context.Update(jobEntity);
             await _context.SaveChangesAsync();
 
-            return job.ToJson(jobEntity.Id);
+            return new Result(true);
         }
 
         public async Task<IEnumerable<JObject>> GetJobs()

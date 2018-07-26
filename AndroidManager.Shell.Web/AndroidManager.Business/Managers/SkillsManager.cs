@@ -30,17 +30,15 @@ namespace AndroidManager.Business.Managers
             return false;
         }
 
-        public async Task<bool> TryCreate(Skill skill)
+        public async Task<Result> TryCreate(Skill skill)
         {
-            if(!skill.IsValid || await IsSkill(skill.Name))
-            {
-                return false;
-            }
+            if (!skill.IsValid) { return new Result(false, "Skill wasn`t created"); }
+            if (await IsSkill(skill.Name)) { return new Result(false, "Skill with this name already exists"); }
 
             await _context.Skills.AddAsync(new SkillEntity { Name = skill.Name });
             await _context.SaveChangesAsync();
 
-            return true;
+            return new Result(true);
         }
 
         public async Task<JArray> GetSkills()

@@ -137,3 +137,14 @@
     width: 100%;
     height: 32px;
 }
+
+.error-anim {
+    animation-name: errortxt;
+    animation-duration: 6s;
+}
+
+@keyframes errortxt {
+    0% {opacity: 1;}
+    50% {opacity: 0.1;}
+    100% {opacity: 0;}
+}

@@ -3,7 +3,7 @@
     constructor(props) {
         super(props);
         let emptyJob = { "Id": null, "Name": "", "Description": "", "Complexity": 0 };
-        this.state = { jobs: [], editableData: emptyJob , showCreate: false, showUpdate : false};
+        this.state = { jobs: [], editableData: emptyJob, showCreate: false, showUpdate: false, errNum: 0, errMsg: ""};
 
         this.onCreateJob = this.onCreateJob.bind(this);
         this.onUpdateJob = this.onUpdateJob.bind(this);
@@ -54,6 +54,12 @@
                 if (xhr.status == 200) {
                     this.loadData();
                 }
+                else {
+                    let data = JSON.parse(xhr.responseText);
+                    let num = this.state.errNum + 1;
+                    this.setState({ errNum: num, errMsg: data.Message });
+                    this.loadData();
+                }
             }.bind(this);
             xhr.send(data);
         }
@@ -77,6 +83,12 @@
                 if (xhr.status == 200) {
                     this.loadData();
                 }
+                else {
+                    let data = JSON.parse(xhr.responseText);
+                    let num = this.state.errNum + 1;
+                    this.setState({ errNum: num, errMsg: data.Message });
+                    this.loadData();
+                }
             }.bind(this);
             xhr.send(data);
         }
@@ -94,6 +106,12 @@
                 if (xhr.status == 200) {
                     this.loadData();
                 }
+                else {
+                    let data = JSON.parse(xhr.responseText);
+                    let num = this.state.errNum + 1;
+                    this.setState({ errNum: num, errMsg: data.Message });
+                    this.loadData();
+                }
             }.bind(this);
             xhr.send(data);
         }
@@ -108,6 +126,7 @@
                 </div>
                 <JobsPanelBody jobs={this.state.jobs} setEditableData={this.setEditableData} hideForms={this.hideForms} onDeleteJob={this.onDeleteJob} />
             </div>
+            <ErrorMsg errNum={this.state.errNum} msg={this.state.errMsg} />
             {this.state.showCreate && <CreateJobForm onCreateJob={this.onCreateJob} hideForms={this.hideForms} jobs={this.state.jobs}/>}
             {this.state.showUpdate && <UpdateJobForm onUpdateJob={this.onUpdateJob} hideForms={this.hideForms} editableData={this.state.editableData} jobs={this.state.jobs}/>}
         </div>;

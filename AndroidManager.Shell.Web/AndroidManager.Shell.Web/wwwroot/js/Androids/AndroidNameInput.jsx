@@ -48,9 +48,6 @@
         let val = e.target.value;
         let isValid = false;
 
-        console.log("val " + val);
-        console.log("state " + this.state.editableName);
-
         let msg = this.validate(val);
 
         if (msg === "") {

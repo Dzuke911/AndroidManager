@@ -12,11 +12,8 @@ namespace AndroidManager.Business.Interfaces
     public interface IAndroidsManager
     {
         Task<IEnumerable<JObject>> GetAndroids();
-
-        Task<JObject> TryCreate(Android android);
-        Task<SkillResult> TryAddSkill(string androidName, string skillName);
-        Task<bool> TryDelete(int id);
-        Task<AssignResult> TryAssignJob(string androidName, string jobName);
-        Task<JObject> TryUpdate(int id, Android job);
+        Task<Result> TryCreate(Android android);
+        Task<Result> TryDelete(int id);
+        Task<Result> TryUpdate(int id, Android job);
     }
 }

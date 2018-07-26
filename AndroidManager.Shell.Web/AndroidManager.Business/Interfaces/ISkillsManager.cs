@@ -9,7 +9,7 @@ namespace AndroidManager.Business.Interfaces
 {
     public interface ISkillsManager
     {
-        Task<bool> TryCreate(Skill skill);
+        Task<Result> TryCreate(Skill skill);
         Task<JArray> GetSkills();
     }
 }

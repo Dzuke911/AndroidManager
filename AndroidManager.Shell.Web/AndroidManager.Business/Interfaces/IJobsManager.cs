@@ -9,9 +9,9 @@ namespace AndroidManager.Business.Interfaces
 {
     public interface IJobsManager
     {
-        Task<JObject> TryCreate(Job job);
         Task<IEnumerable<JObject>> GetJobs();
-        Task<JObject> TryUpdate(int id, Job job);
-        Task<bool> TryDelete(int id);
+        Task<Result> TryCreate(Job job);
+        Task<Result> TryUpdate(int id, Job job);
+        Task<Result> TryDelete(int id);
     }
 }

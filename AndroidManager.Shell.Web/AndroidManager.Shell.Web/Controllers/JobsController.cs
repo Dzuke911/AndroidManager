@@ -35,49 +35,50 @@ namespace AndroidManager.Shell.Web.Controllers
             int complexity;
             try
             {
-                complexity = (int)job.Property("Complexity");
+                complexity = job.Value<int>("Complexity");
             }
             catch
             {
                 complexity = 0;
             }
 
-            Job newJob = new Job((string)job.Property("Name"), (string)job.Property("Description"), complexity);
-            JObject result = await _jobsManager.TryCreate(newJob);
+            Job newJob = new Job(job.Value<string>("Name"), job.Value<string>("Description"), complexity);
+            Result res = await _jobsManager.TryCreate(newJob);
 
-            if (result != null)
-            {
-                return Ok(result);
-            }
+            if (res.Succeeded) { return Ok(res.ToJson()); }
 
-            return BadRequest(result);
+            return BadRequest(res.ToJson());
         }
 
         [HttpPut]
         public async Task<IActionResult> Put([FromBody]JObject job)
         {
-            Job newJob = new Job((string)job.Property("Name"), (string)job.Property("Description"), (int)job.Property("Complexity"));
-            JObject result = await _jobsManager.TryUpdate((int)job.Property("Id"),newJob);
-
-            if (result != null)
+            int complexity;
+            try
             {
-                return Ok(result);
+                complexity = job.Value<int>("Complexity");
+            }
+            catch
+            {
+                complexity = 0;
             }
 
-            return BadRequest(result);
+            Job newJob = new Job(job.Value<string>("Name"), job.Value<string>("Description"), complexity);
+            Result res = await _jobsManager.TryUpdate((int)job.Property("Id"),newJob);
+
+            if (res.Succeeded) { return Ok(res.ToJson()); }
+
+            return BadRequest(res.ToJson());
         }
 
         [HttpDelete]
         public async Task<IActionResult> Delete([FromBody]JObject obj)
         {
-            int id = (int)obj.Property("Id");
+            Result res = await _jobsManager.TryDelete(obj.Value<int>("Id"));
 
-            if (await _jobsManager.TryDelete(id))
-            {
-                return Ok(true);
-            }
+            if (res.Succeeded) { return Ok(res.ToJson()); }
 
-            return BadRequest(false);
+            return BadRequest(res.ToJson());
         }
     }
 }

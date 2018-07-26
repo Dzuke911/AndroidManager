@@ -43,9 +43,21 @@
 
         let dropdownList = this.getTooltip();
 
+        let deleteClass = "btn btn-danger job-btn-delete";
+        let isDisabled = false;
+        let deleteTooltip = "Delete job";
+
+        if (this.state.data.Androids.length > 0) {
+            deleteClass = "btn btn-diabled job-btn-delete";
+            isDisabled = true;
+            deleteTooltip = "Can`t delete job with androids assigned";
+        }
+
         return <div className="job-frame" data-toggle="tooltip" title={this.state.data.Description}>
-            <label>{this.state.data.Name}</label>            
-            <button className="btn btn-danger job-btn-delete" onClick={this.onDelete} data-toggle="tooltip" title="Delete job"><span className="glyphicon glyphicon-remove"></span></button>
+            <label>{this.state.data.Name}</label>
+            <button className={deleteClass} onClick={this.onDelete} data-toggle="tooltip" title={deleteTooltip} disabled={isDisabled}>
+                <span className="glyphicon glyphicon-remove"></span>
+            </button>
             <br />
             <div className="dropdown job-dropdown">
                 <button type="button" className="btn btn-primary dropdown-toggle job-dropdown-button" data-toggle="dropdown">Androids assigned:</button>

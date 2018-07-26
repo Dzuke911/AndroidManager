@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -66,29 +67,18 @@ namespace AndroidManager.Business.Managers
             return ret;
         }
 
-        public async Task<JObject> TryCreate(Android android)
+        public async Task<Result> TryCreate(Android android)
         {
-            if (await IsAndroid(android.Name) || !android.IsValid)
-            {
-                return null;
-            }
+            if (!android.IsValid) { return new Result(false, "Android wasn`t created"); }
+            if (await IsAndroid(android.Name)) { return new Result(false, "Android with this name already exists"); }
 
-            foreach (Skill s in android.Skills)
-            {
-                if (!s.IsValid)
-                {
-                    return null;
-                }
-            }
+            if (android.Skills.Where(s => !s.IsValid).Count() > 0) { return new Result(false, "Android wasn`t created: skill error"); }
 
             AndroidEntity androidEntity = new AndroidEntity { Name = android.Name, Reliability = 10, Status = true };
 
             JobEntity job = await _context.Jobs.FirstOrDefaultAsync(j => j.Id == android.JobId);
 
-            if (job == null)
-            {
-                return null;
-            }
+            if (job == null) { return new Result(false, "Android wasn`t created: job error"); }
 
             androidEntity.Job = job;
 
@@ -114,119 +104,34 @@ namespace AndroidManager.Business.Managers
             _context.Update(androidEntity);
             await _context.SaveChangesAsync();
 
-            return android.ToJson(androidEntity.Id);
+            return new Result(true);
         }
 
-        public async Task<SkillResult> TryAddSkill(string androidName, string skillName)
-        {
-            AndroidEntity android = await _context.Androids.FirstOrDefaultAsync(a => a.Name == androidName);
-
-            if (android == null)
-            {
-                return SkillResult.AndroidNotExists;
-            }
-
-            SkillEntity skill = await _context.Skills.FirstOrDefaultAsync(s => s.Name == skillName);
-
-            if (skill == null)
-            {
-                return SkillResult.SkillNotExists;
-            }
-
-            await _context.Entry(android).Collection(a => a.SkillsToAndroids).LoadAsync();
-
-            foreach (SkillToAndroidEntity r in android.SkillsToAndroids)
-            {
-                if (r.Skill.Name == skillName)
-                {
-                    return SkillResult.AlreadyHadSkill;
-                }
-            }
-
-            android.SkillsToAndroids.Add(new SkillToAndroidEntity { Skill = skill });
-            _context.Update(android);
-            await _context.SaveChangesAsync();
-
-            return SkillResult.Success;
-        }
-
-        public async Task<AssignResult> TryAssignJob(string androidName, string jobName)
-        {
-            JobEntity job = await _context.Jobs.FirstOrDefaultAsync(j => j.Name == jobName);
-
-            if (job == null)
-            {
-                return AssignResult.JobNotExists;
-            }
-
-            AndroidEntity android = await _context.Androids.FirstOrDefaultAsync(a => a.Name == jobName);
-
-            if (android == null)
-            {
-                return AssignResult.AndroidNotExists;
-            }
-
-            if (android.Job == job)
-            {
-                return AssignResult.AlreadyThisJob;
-            }
-
-            android.Reliability = Math.Max(--android.Reliability, 0);
-
-            if (android.Reliability <= 0)
-            {
-                android.Status = false;
-            }
-
-            if (!android.Status)
-            {
-                return AssignResult.AndroidReclaimed;
-            }
-
-            android.Job = job;
-            _context.Androids.Update(android);
-            await _context.SaveChangesAsync();
-
-            return AssignResult.Success;
-        }
-
-        public async Task<bool> TryDelete(int id)
+        public async Task<Result> TryDelete(int id)
         {
             AndroidEntity android = await _context.Androids.FirstOrDefaultAsync(a => a.Id == id);
 
-            if (android == null)
-            {
-                return false;
-            }
+            if (android == null) { return new Result(false, "Can`t find android with current id"); }
 
             _context.Androids.Remove(android);
             await _context.SaveChangesAsync();
 
-            return true;
+            return new Result(true);
         }
 
-        public async Task<JObject> TryUpdate(int id, Android android)
+        public async Task<Result> TryUpdate(int id, Android android)
         {
-            if (!android.IsValid)
-            {
-                return null;
-            }
+            if (!android.IsValid) { return new Result(false, "Android wasn`t updated"); }
 
             AndroidEntity androidEntity = await _context.Androids.SingleOrDefaultAsync(a => a.Id == id);
 
-            if (androidEntity == null)
-            {
-                return null;
-            }
+            if (androidEntity == null) { return new Result(false, "Can`t find android with current id"); }
 
             if (androidEntity.Reliability > 0)
             {
                 JobEntity job = await _context.Jobs.SingleOrDefaultAsync(j => j.Id == android.JobId);
 
-                if (job == null)
-                {
-                    return null;
-                }
+                if (job == null) { return new Result(false, "Android wasn`t updated: job error"); }
 
                 if (job != androidEntity.Job)
                 {
@@ -248,17 +153,11 @@ namespace AndroidManager.Business.Managers
 
             foreach (Skill s in android.Skills)
             {
-                if (!s.IsValid)
-                {
-                    return null;                    
-                }
+                if (!s.IsValid) { return new Result(false, "Android wasn`t updated: skill error"); }
 
                 currEntity = await _context.Skills.FirstOrDefaultAsync(e => e.Name == s.Name);
 
-                if(currEntity == null)
-                {
-                    return null;
-                }
+                if(currEntity == null) { return new Result(false, "Android wasn`t updated: skill error"); }
 
                 skillEntities.Add(currEntity);
             }
@@ -274,7 +173,7 @@ namespace AndroidManager.Business.Managers
             _context.Update(androidEntity);
             await _context.SaveChangesAsync();
 
-            return android.ToJson(androidEntity.Id);
+            return new Result(true);
         }
     }
 }

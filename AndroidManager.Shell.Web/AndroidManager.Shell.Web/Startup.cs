@@ -58,7 +58,7 @@ namespace AndroidManager.Shell.Web
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Jobs}/{id?}");
+                    template: "{controller=Home}/{action=Androids}/{id?}");
             });
         }
     }

@@ -54,16 +54,13 @@ namespace AndroidManager.Shell.Web.Controllers
                 skills.Add(currSkill);
             }
 
-            Android newAndroid = new Android((string)android.Property("Name"), (int)android.Property("JobId"), skills.ToArray());
+            Android newAndroid = new Android(android.Value<string>("Name"), android.Value<int>("JobId"), skills.ToArray());
 
-            JObject result = await _androidsManager.TryCreate(newAndroid);
+            Result res = await _androidsManager.TryCreate(newAndroid);
 
-            if (result != null)
-            {
-                return Ok(result);
-            }
+            if (res.Succeeded) { return Ok(res.ToJson()); }
 
-            return BadRequest(result);
+            return BadRequest(res.ToJson());
         }
 
         [HttpPut]
@@ -81,28 +78,23 @@ namespace AndroidManager.Shell.Web.Controllers
                 skills.Add(currSkill);
             }
 
-            Android newAndroid = new Android((string)android.Property("Name"), (int)android.Property("JobId"), skills.ToArray());
-            JObject result = await _androidsManager.TryUpdate((int)android.Property("Id"), newAndroid);
+            Android newAndroid = new Android(android.Value<string>("Name"), android.Value<int>("JobId"), skills.ToArray());
+            Result res = await _androidsManager.TryUpdate(android.Value<int>("Id"), newAndroid);
 
-            if (result != null)
-            {
-                return Ok(result);
-            }
+            if (res.Succeeded) { return Ok(res.ToJson()); }
 
-            return BadRequest(result);
+            return BadRequest(res.ToJson());
         }
 
         [HttpDelete]
         public async Task<IActionResult> Delete([FromBody]JObject obj)
         {
-            int id = (int)obj.Property("Id");
+            Result res = await _androidsManager.TryDelete(obj.Value<int>("Id"));
+            //Result res = await _androidsManager.TryDelete((int)obj.Property("Id"));
 
-            if (await _androidsManager.TryDelete(id))
-            {
-                return Ok(true);
-            }
+            if (res.Succeeded) { return Ok(res.ToJson()); }
 
-            return BadRequest(false);
+            return BadRequest(res.ToJson());
         }
 
         [HttpPost]

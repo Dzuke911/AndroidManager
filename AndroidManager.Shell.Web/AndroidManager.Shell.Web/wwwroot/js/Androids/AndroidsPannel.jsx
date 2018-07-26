@@ -3,7 +3,7 @@
     constructor(props) {
         super(props);
         let emptyAndroid = { "Id": null, "Name": "" };
-        this.state = { androids: [], jobs:[],skills:[], editableData: emptyAndroid , showCreate: false, showUpdate : false, selectedAvatar: undefined};
+        this.state = { androids: [], jobs:[],skills:[], editableData: emptyAndroid , showCreate: false, showUpdate : false, selectedAvatar: undefined, errNum : 0, errMsg : ""};
 
         this.onCreateAndroid = this.onCreateAndroid.bind(this);
         this.onUpdateAndroid = this.onUpdateAndroid.bind(this);
@@ -79,6 +79,12 @@
                 if (xhr.status == 200) {
                     this.loadData();
                 }
+                else {
+                    let data = JSON.parse(xhr.responseText);                   
+                    let num = this.state.errNum + 1;
+                    this.setState({ errNum: num, errMsg: data.Message });
+                    this.loadData();
+                }
             }.bind(this);
             xhr.send(data);
         }
@@ -102,6 +108,12 @@
                 if (xhr.status == 200) {
                     this.loadData();
                 }
+                else {
+                    let data = JSON.parse(xhr.responseText);
+                    let num = this.state.errNum + 1;
+                    this.setState({ errNum: num, errMsg: data.Message });
+                    this.loadData();
+                }
             }.bind(this);
             xhr.send(data);
         }
@@ -119,6 +131,12 @@
                 if (xhr.status == 200) {
                     this.loadData();
                 }
+                else {
+                    let data = JSON.parse(xhr.responseText);
+                    let num = this.state.errNum + 1;
+                    this.setState({ errNum: num, errMsg: data.Message });
+                    this.loadData();
+                }
             }.bind(this);
             xhr.send(data);
         }
@@ -133,6 +151,7 @@
                 </div>
                 <AndroidsPanelBody androids={this.state.androids} setEditableData={this.setEditableData} hideForms={this.hideForms} onDeleteAndroid={this.onDeleteAndroid} />
             </div>
+            <ErrorMsg errNum={this.state.errNum} msg={this.state.errMsg} />
             {this.state.showCreate && <CreateAndroidForm onCreateAndroid={this.onCreateAndroid} jobs={this.state.jobs} skills={this.state.skills} androids={this.state.androids} hideForms={this.hideForms} />}
             {this.state.showUpdate && <UpdateAndroidForm onUpdateAndroid={this.onUpdateAndroid} jobs={this.state.jobs} skills={this.state.skills} androids={this.state.androids} hideForms={this.hideForms} editableData={this.state.editableData} />}
         </div>;

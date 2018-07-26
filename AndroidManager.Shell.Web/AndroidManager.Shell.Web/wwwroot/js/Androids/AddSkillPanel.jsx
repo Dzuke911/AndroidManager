@@ -2,7 +2,7 @@
 
     constructor(props) {
         super(props);
-        this.state = { currentSkills: props.currentSkills, allSkills: props.allSkills };
+        this.state = { currentSkills: props.currentSkills, allSkills: props.allSkills};
 
         this.addSkill = this.addSkill.bind(this);
     }
@@ -18,6 +18,7 @@
         if (this.refs.skillNameInput.state.valid) {
 
             let name = this.refs.skillNameInput.state.value;
+            this.refs.skillNameInput.state.value = "";
             this.props.onAddSkill(name);
         }
     }
