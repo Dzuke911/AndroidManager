@@ -133,8 +133,8 @@
                 </div>
                 <AndroidsPanelBody androids={this.state.androids} setEditableData={this.setEditableData} hideForms={this.hideForms} onDeleteAndroid={this.onDeleteAndroid} />
             </div>
-            {this.state.showCreate && <CreateAndroidForm onCreateAndroid={this.onCreateAndroid} jobs={this.state.jobs} skills={this.state.skills} hideForms={this.hideForms} />}
-            {this.state.showUpdate && <UpdateAndroidForm onUpdateAndroid={this.onUpdateAndroid} jobs={this.state.jobs} skills={this.state.skills} hideForms={this.hideForms} editableData={this.state.editableData} />}
+            {this.state.showCreate && <CreateAndroidForm onCreateAndroid={this.onCreateAndroid} jobs={this.state.jobs} skills={this.state.skills} androids={this.state.androids} hideForms={this.hideForms} />}
+            {this.state.showUpdate && <UpdateAndroidForm onUpdateAndroid={this.onUpdateAndroid} jobs={this.state.jobs} skills={this.state.skills} androids={this.state.androids} hideForms={this.hideForms} editableData={this.state.editableData} />}
         </div>;
     }
 }

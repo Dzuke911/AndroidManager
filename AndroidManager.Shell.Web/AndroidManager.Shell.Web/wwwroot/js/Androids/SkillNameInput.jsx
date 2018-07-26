@@ -8,7 +8,7 @@
             isValid = true;
         }
 
-        this.state = { value: props.value, valid: isValid, error: msg, allSkills: props.allSkills };
+        this.state = { value: props.value, valid: isValid, error: msg, allSkills: props.allSkills, currentSkills: props.currentSkills };
         this.onChange = this.onChange.bind(this);
     }
 
@@ -22,7 +22,7 @@
                 isValid = true;
             }
 
-            this.setState({ value: nextProps.value, valid: isValid, error: msg });
+            this.setState({ value: nextProps.value, valid: isValid, error: msg, currentSkills: nextProps.currentSkills});
         }
     }
 
@@ -36,6 +36,13 @@
 
         if (/^[a-zA-Z0-9-]+$/.test(val) === false) {
             return "Skill name should contain alphanumeric characters only";
+        }
+
+        let currSkills = this.state.currentSkills;
+        for (let i = 0; i < currSkills.length; i++) {
+            if (val == currSkills[i]) {
+                return "Android already have this skill";
+            }
         }
 
         return "";

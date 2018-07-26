@@ -102,6 +102,13 @@ namespace AndroidManager.Shell.Web.Controllers
             return RedirectToAction(nameof(AccountController.Login));
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<JsonResult> EmailExists(string email)
+        {
+            return Json(!await _authenticationManager.EmailAlreadyExistsAsync(email));
+        }
+
         #region Helpers
 
         private void AddErrors(IdentityResult result)

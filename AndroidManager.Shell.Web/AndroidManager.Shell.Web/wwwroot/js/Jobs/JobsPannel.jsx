@@ -108,8 +108,8 @@
                 </div>
                 <JobsPanelBody jobs={this.state.jobs} setEditableData={this.setEditableData} hideForms={this.hideForms} onDeleteJob={this.onDeleteJob} />
             </div>
-            {this.state.showCreate && <CreateJobForm onCreateJob={this.onCreateJob} hideForms={this.hideForms} />}
-            {this.state.showUpdate && <UpdateJobForm onUpdateJob={this.onUpdateJob} hideForms={this.hideForms} editableData={this.state.editableData} />}
+            {this.state.showCreate && <CreateJobForm onCreateJob={this.onCreateJob} hideForms={this.hideForms} jobs={this.state.jobs}/>}
+            {this.state.showUpdate && <UpdateJobForm onUpdateJob={this.onUpdateJob} hideForms={this.hideForms} editableData={this.state.editableData} jobs={this.state.jobs}/>}
         </div>;
     }
 }

@@ -2,27 +2,23 @@
     constructor(props) {
         super(props);
         let isValid = false;
+
+        this.state = { editableName: props.editableName, androids: props.androids };
+
         let msg = this.validate(props.value);
 
         if (msg === "") {
             isValid = true;
         }
 
-        this.state = { value: props.value, valid: isValid, error: msg};
+        this.state = { editableName: props.editableName, value: props.value, valid: isValid, error: msg, androids: props.androids};
         this.onChange = this.onChange.bind(this);
     }
 
     componentWillUpdate(nextProps, nextState) {
-        if (this.props.value != nextProps.value) {
+        if (this.props.value != nextProps.value || this.props.editableName != nextProps.editableName) {
 
-            let isValid = false;
-            let msg = this.validate(nextProps.value);
-
-            if (msg === "") {
-                isValid = true;
-            }
-
-            this.setState({ value: nextProps.value, valid: isValid, error: msg});
+            this.setState({ editableName: nextProps.editableName, value: nextProps.value })
         }
     }
 
@@ -33,9 +29,16 @@
         if (val.length > 24) {
             return "Android name should be less than 24 characters";
         }
-
         if (/^[a-zA-Z0-9-]+$/.test(val) === false) {
             return "Android name should contain alphanumeric characters only";
+        }
+
+        let androids = this.state.androids;
+
+        for (let i = 0; i < androids.length; i++) {
+            if (val == androids[i].Name && val != this.state.editableName) {
+                return "This android name is already in use";
+            }
         }
 
         return "";
@@ -44,6 +47,10 @@
     onChange(e) {
         let val = e.target.value;
         let isValid = false;
+
+        console.log("val " + val);
+        console.log("state " + this.state.editableName);
+
         let msg = this.validate(val);
 
         if (msg === "") {

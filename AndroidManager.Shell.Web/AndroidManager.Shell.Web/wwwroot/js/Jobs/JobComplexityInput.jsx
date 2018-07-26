@@ -30,6 +30,9 @@
         if (val < 0) {
             return "Complexity should be more than zero";
         }
+        if (val.length <= 0) {
+            return "Enter complexity integer value";
+        }
 
         return "";
     }

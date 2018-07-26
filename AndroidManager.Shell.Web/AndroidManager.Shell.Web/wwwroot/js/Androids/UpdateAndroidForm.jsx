@@ -9,7 +9,7 @@
             currentSkills.push(skills[i].Name);
         }
 
-        this.state = { currentSkills: currentSkills };
+        this.state = { currentSkills: currentSkills, androids: props.androids};
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.addSkill = this.addSkill.bind(this);
@@ -32,17 +32,20 @@
 
     handleSubmit(e) {
         e.preventDefault();
-        if (this.props.editableData.Id){
-            let Name = this.refs.androidNameInput.state.value;
-            let JobId = this.refs.androidJobInput.state.value;
+        if (this.props.editableData.Id) {
+            if (this.refs.androidNameInput.state.valid &&
+                this.refs.androidJobInput.state.valid) {
+                let Name = this.refs.androidNameInput.state.value;
+                let JobId = this.refs.androidJobInput.state.value;
 
-            let Id = this.props.editableData.Id;
-            let Skills = this.state.currentSkills;
+                let Id = this.props.editableData.Id;
+                let Skills = this.state.currentSkills;
 
-            let data = { "Id": Id, "Name": Name , "JobId": JobId, "Skills": Skills};
+                let data = { "Id": Id, "Name": Name, "JobId": JobId, "Skills": Skills };
 
-            this.props.onUpdateAndroid(data);
-            this.props.hideForms(null);
+                this.props.onUpdateAndroid(data);
+                this.props.hideForms(null);
+            }
         }
     }
 
@@ -89,7 +92,7 @@
             <div className="panel-body">
                 <form onSubmit={this.handleSubmit}>
                     <div className="col-sm-8">
-                        <AndroidNameInput value={this.props.editableData.Name} ref="androidNameInput" />
+                        <AndroidNameInput value={this.props.editableData.Name} ref="androidNameInput" androids={this.state.androids} editableName={this.props.editableData.Name}/>
                         <AndroidJobInput value={this.props.editableData.Job.Id} jobs={this.props.jobs} ref="androidJobInput" />
                     </div>
                     <div className="col-sm-4">

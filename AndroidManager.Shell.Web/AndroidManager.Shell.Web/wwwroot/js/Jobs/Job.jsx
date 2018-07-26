@@ -41,11 +41,7 @@
 
     render() {
 
-
-
         let dropdownList = this.getTooltip();
-
-        console.log(dropdownList);
 
         return <div className="job-frame" data-toggle="tooltip" title={this.state.data.Description}>
             <label>{this.state.data.Name}</label>            

@@ -38,5 +38,10 @@ namespace AndroidManager.Business.Authentication
         {
             await _signInManager.SignOutAsync();
         }
+
+        public async Task<bool> EmailAlreadyExistsAsync(string email)
+        {
+            return (await _userManager.FindByNameAsync(email) != null);
+        }
     }
 }

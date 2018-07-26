@@ -2,19 +2,27 @@
     constructor(props) {
         super(props);
 
+        this.state = { jobs: props.jobs };
+
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleSubmit(e) {
         e.preventDefault();
-        let Name = this.refs.jobNameInput.state.value;
-        let Description = this.refs.jobDescriptionInput.state.value;
-        let Complexity = this.refs.jobComplexityInput.state.value;
 
-        let data = { "Name": Name, "Description": Description, "Complexity": Complexity };
+        if (this.refs.jobNameInput.state.valid &&
+            this.refs.jobDescriptionInput.state.valid &&
+            this.refs.jobComplexityInput.state.valid) {
 
-        this.props.onCreateJob(data);
-        this.props.hideForms(null);
+            let Name = this.refs.jobNameInput.state.value;
+            let Description = this.refs.jobDescriptionInput.state.value;
+            let Complexity = this.refs.jobComplexityInput.state.value;
+
+            let data = { "Name": Name, "Description": Description, "Complexity": Complexity };
+
+            this.props.onCreateJob(data);
+            this.props.hideForms(null);
+        }
     }
 
     render() {
@@ -24,7 +32,7 @@
             </div>
             <div className="panel-body">
                 <form onSubmit={this.handleSubmit}>
-                    <JobNameInput value="newJob" ref="jobNameInput" />
+                    <JobNameInput value="newJob" ref="jobNameInput" jobs={this.state.jobs}/>
                     <JobDescriptionInput value="" ref="jobDescriptionInput" />
                     <JobComplexityInput value="0" ref="jobComplexityInput" />
                     <input type="submit" className="btn btn-primary form-control" value="Submit" />

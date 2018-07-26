@@ -15,8 +15,11 @@
     }
 
     addSkill(e) {
-        let name = this.refs.skillNameInput.state.value;
-        this.props.onAddSkill(name);
+        if (this.refs.skillNameInput.state.valid) {
+
+            let name = this.refs.skillNameInput.state.value;
+            this.props.onAddSkill(name);
+        }
     }
 
     render() {
@@ -32,7 +35,7 @@
 
         return <div className="skill-panel">
             <div className="col-xs-10">
-                <SkillNameInput value="" ref="skillNameInput" allSkills={this.state.allSkills} />
+                <SkillNameInput value="" ref="skillNameInput" allSkills={this.state.allSkills} currentSkills={this.state.currentSkills}/>
             </div>
             <div className="col-xs-2">
                 <button type="button" className="btn btn-primary skill-btn-add" onClick={this.addSkill} data-toggle="tooltip" title="Add skill"><span className="glyphicon glyphicon-plus-sign" style={{ fontSize: '1.3em' }}></span></button>

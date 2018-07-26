@@ -32,7 +32,17 @@ namespace AndroidManager.Shell.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]JObject job)
         {
-            Job newJob = new Job((string)job.Property("Name"), (string)job.Property("Description"), (int)job.Property("Complexity"));
+            int complexity;
+            try
+            {
+                complexity = (int)job.Property("Complexity");
+            }
+            catch
+            {
+                complexity = 0;
+            }
+
+            Job newJob = new Job((string)job.Property("Name"), (string)job.Property("Description"), complexity);
             JObject result = await _jobsManager.TryCreate(newJob);
 
             if (result != null)

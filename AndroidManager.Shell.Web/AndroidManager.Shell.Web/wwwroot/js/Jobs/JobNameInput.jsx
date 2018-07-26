@@ -2,27 +2,23 @@
     constructor(props) {
         super(props);
         let isValid = false;
+
+        this.state = { editableName: props.editableName, jobs: props.jobs };
+
         let msg = this.validate(props.value);
 
         if (msg === "") {
             isValid = true;
         }
 
-        this.state = { value: props.value, valid: isValid, error: msg};
+        this.state = { editableName: props.editableName, value: props.value, valid: isValid, error: msg, jobs: props.jobs};
         this.onChange = this.onChange.bind(this);
     }
 
     componentWillUpdate(nextProps, nextState) {
-        if (this.props.value != nextProps.value) {
+        if (this.props.value != nextProps.value || this.props.editableName != nextProps.editableName) {
 
-            let isValid = false;
-            let msg = this.validate(nextProps.value);
-
-            if (msg === "") {
-                isValid = true;
-            }
-
-            this.setState({ value: nextProps.value, valid: isValid, error: msg});
+            this.setState({ value: nextProps.value, editableName: nextProps.editableName});
         }
     }
 
@@ -36,6 +32,14 @@
 
         if (/^[a-zA-Z0-9-]+$/.test(val) === false) {
             return "Job name should contain alphanumeric characters only";
+        }
+
+        let jobs = this.state.jobs;
+
+        for (let i = 0; i < jobs.length; i++) {
+            if (val == jobs[i].Name && val != this.state.editableName) {
+                return "This job name is already in use";
+            }
         }
 
         return "";

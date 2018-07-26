@@ -2,7 +2,7 @@
     constructor(props) {
         super(props);
 
-        this.state = { currentSkills: [] };
+        this.state = { currentSkills: [], androids: props.androids };
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.addSkill = this.addSkill.bind(this);
@@ -11,16 +11,22 @@
 
     handleSubmit(e) {
         e.preventDefault();
-        let Name = this.refs.androidNameInput.state.value;
-        let JobId = this.refs.androidJobInput.state.value;
-        let Avatar = this.refs.androidAvatarInput.state.value;
 
-        let Skills = this.state.currentSkills;
+        if (this.refs.androidNameInput.state.valid &&
+            this.refs.androidJobInput.state.valid &&
+            this.refs.androidAvatarInput.state.valid) {
 
-        let data = { "Name": Name, "JobId": JobId , "Skills" : Skills, "Avatar" : Avatar};
+            let Name = this.refs.androidNameInput.state.value;
+            let JobId = this.refs.androidJobInput.state.value;
+            let Avatar = this.refs.androidAvatarInput.state.value;
 
-        this.props.onCreateAndroid(data);
-        this.props.hideForms(null);
+            let Skills = this.state.currentSkills;
+
+            let data = { "Name": Name, "JobId": JobId, "Skills": Skills, "Avatar": Avatar };
+
+            this.props.onCreateAndroid(data);
+            this.props.hideForms(null);
+        }
     }
 
     addSkill(name) {
@@ -66,7 +72,7 @@
             <div className="panel-body">
                 <form onSubmit={this.handleSubmit}>
                     <div className="col-sm-8">
-                        <AndroidNameInput value="newAndroid" ref="androidNameInput" />
+                        <AndroidNameInput value="newAndroid" ref="androidNameInput" androids={this.state.androids}/>
                         <AndroidJobInput value={this.props.jobs[0].Id} jobs={this.props.jobs} ref="androidJobInput" />
                         <AndroidAvatarInput value="" ref="androidAvatarInput" />
                     </div>
