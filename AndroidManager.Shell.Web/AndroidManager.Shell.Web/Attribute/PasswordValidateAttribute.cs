@@ -21,11 +21,11 @@ namespace AndroidManager.Shell.Web.Attribute
             string password = (string)pInfo.GetValue(context.ObjectInstance);
 
 
-            if (password.Length > 8)
+            if (password.Length > 16)
             {
                 return new ValidationResult($"The password length hasn`t to be greater than 16 characters");
             }
-            if (password.Length < 16)
+            if (password.Length < 8)
             {
                 return new ValidationResult($"The password length hasn`t to be less than 8 characters");
             }

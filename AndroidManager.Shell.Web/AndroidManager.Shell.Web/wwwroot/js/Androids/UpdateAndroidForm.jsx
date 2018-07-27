@@ -34,14 +34,17 @@
         e.preventDefault();
         if (this.props.editableData.Id) {
             if (this.refs.androidNameInput.state.valid &&
-                this.refs.androidJobInput.state.valid) {
+                this.refs.androidJobInput.state.valid &&
+                this.refs.androidAvatarInput.state.valid) {
+
                 let Name = this.refs.androidNameInput.state.value;
                 let JobId = this.refs.androidJobInput.state.value;
+                let Avatar = this.refs.androidAvatarInput.state.value;
 
                 let Id = this.props.editableData.Id;
                 let Skills = this.state.currentSkills;
 
-                let data = { "Id": Id, "Name": Name, "JobId": JobId, "Skills": Skills };
+                let data = { "Id": Id, "Name": Name, "JobId": JobId, "Skills": Skills , "Avatar": Avatar};
 
                 this.props.onUpdateAndroid(data);
                 this.props.hideForms(null);
@@ -94,6 +97,7 @@
                     <div className="col-sm-8">
                         <AndroidNameInput value={this.props.editableData.Name} ref="androidNameInput" androids={this.state.androids} editableName={this.props.editableData.Name}/>
                         <AndroidJobInput value={this.props.editableData.Job.Id} jobs={this.props.jobs} ref="androidJobInput" />
+                        <AndroidAvatarInput value="" ref="androidAvatarInput" />
                     </div>
                     <div className="col-sm-4">
                         <AddSkillPanel allSkills={this.props.skills} onAddSkill={this.addSkill} onRemoveSkill={this.removeSkill} currentSkills={this.state.currentSkills} />

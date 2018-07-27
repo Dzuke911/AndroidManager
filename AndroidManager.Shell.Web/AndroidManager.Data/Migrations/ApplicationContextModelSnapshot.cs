@@ -26,7 +26,7 @@ namespace AndroidManager.Data.Migrations
                         .HasColumnName("Id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<byte[]>("Avatar")
+                    b.Property<string>("Avatar")
                         .HasColumnName("Avatar");
 
                     b.Property<int>("JobId")

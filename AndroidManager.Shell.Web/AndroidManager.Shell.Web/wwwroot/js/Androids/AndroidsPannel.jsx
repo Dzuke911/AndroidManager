@@ -3,7 +3,7 @@
     constructor(props) {
         super(props);
         let emptyAndroid = { "Id": null, "Name": "" };
-        this.state = { androids: [], jobs:[],skills:[], editableData: emptyAndroid , showCreate: false, showUpdate : false, selectedAvatar: undefined, errNum : 0, errMsg : ""};
+        this.state = { androids: [], jobs: [], skills: [], editableData: emptyAndroid, showCreate: false, showUpdate: false, selectedAvatar: undefined, errNum: 0, errMsg: "" };
 
         this.onCreateAndroid = this.onCreateAndroid.bind(this);
         this.onUpdateAndroid = this.onUpdateAndroid.bind(this);
@@ -67,9 +67,12 @@
     onCreateAndroid(android) {
         if (android) {
 
-            console.log(android.Avatar);
+            let avName = "banner1.svg";
+            if (android.Avatar) {
+                avName = android.Avatar.name;
+            }
 
-            let data = JSON.stringify({ "Name": android.Name, "JobId": android.JobId, "Skills": android.Skills, "Avatar": android.Avatar });
+            let data = JSON.stringify({ "Name": android.Name, "JobId": android.JobId, "Skills": android.Skills, "Avatar": avName });
 
             let xhr = new XMLHttpRequest();
 
@@ -80,13 +83,25 @@
                     this.loadData();
                 }
                 else {
-                    let data = JSON.parse(xhr.responseText);                   
+                    let data = JSON.parse(xhr.responseText);
                     let num = this.state.errNum + 1;
                     this.setState({ errNum: num, errMsg: data.Message });
                     this.loadData();
                 }
             }.bind(this);
             xhr.send(data);
+            ///////////////////////
+            if (android.Avatar) {
+                let apiBaseUrl = this.props.addImageUrl;
+
+                let f = new FormData();
+                f.append("File", android.Avatar);
+
+                axios.post(apiBaseUrl, f, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+            }
+            ///////////////////////
         }
     }
 
@@ -99,7 +114,12 @@
     onUpdateAndroid(android) {
         if (android) {
 
-            let data = JSON.stringify({ "Id": android.Id, "Name": android.Name, "JobId": android.JobId, "Skills": android.Skills });
+            let avName = "banner1.svg";
+            if (android.Avatar) {
+                avName = android.Avatar.name;
+            }
+
+            let data = JSON.stringify({ "Id": android.Id, "Name": android.Name, "JobId": android.JobId, "Skills": android.Skills, "Avatar": avName });
             let xhr = new XMLHttpRequest();
 
             xhr.open("put", this.props.putUrl, true);
@@ -116,13 +136,26 @@
                 }
             }.bind(this);
             xhr.send(data);
+
+            ///////////////////////
+            if (android.Avatar) {
+                let apiBaseUrl = this.props.addImageUrl;
+
+                let f = new FormData();
+                f.append("File", android.Avatar);
+
+                axios.post(apiBaseUrl, f, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+            }
+            ///////////////////////
         }
     }
 
     onDeleteAndroid(android) {
         if (android) {
 
-            let data = JSON.stringify({ "Id": android.Id});
+            let data = JSON.stringify({ "Id": android.Id });
             let xhr = new XMLHttpRequest();
 
             xhr.open("delete", this.props.deleteUrl, true);
@@ -159,6 +192,6 @@
 }
 
 ReactDOM.render(
-    <AndroidsPannel getUrl={document.getElementById("GetAndroidsUrl").innerHTML} postUrl={document.getElementById("PostAndroidsUrl").innerHTML} putUrl={document.getElementById("PutAndroidsUrl").innerHTML} deleteUrl={document.getElementById("DeleteAndroidsUrl").innerHTML} getJobsUrl={document.getElementById("GetJobsUrl").innerHTML} getSkillsUrl={document.getElementById("GetSkillsUrl").innerHTML} addImageUrl={document.getElementById("AddImageUrl").innerHTML}/>,
+    <AndroidsPannel getUrl={document.getElementById("GetAndroidsUrl").innerHTML} postUrl={document.getElementById("PostAndroidsUrl").innerHTML} putUrl={document.getElementById("PutAndroidsUrl").innerHTML} deleteUrl={document.getElementById("DeleteAndroidsUrl").innerHTML} getJobsUrl={document.getElementById("GetJobsUrl").innerHTML} getSkillsUrl={document.getElementById("GetSkillsUrl").innerHTML} addImageUrl={document.getElementById("AddImageUrl").innerHTML} />,
     document.getElementById("AndroidsPannel")
 );

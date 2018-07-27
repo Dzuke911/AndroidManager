@@ -59,7 +59,8 @@ namespace AndroidManager.Business.Managers
                     new JProperty("Job", new JObject(new JProperty("Id", android.Job.Id), new JProperty("Name", android.Job.Name))),
                     new JProperty("Reliability", android.Reliability),
                     new JProperty("Status", android.Status),
-                    new JProperty("Skills", skills)
+                    new JProperty("Skills", skills),
+                    new JProperty("Avatar", android.Avatar)
                     );
                 ret.Add(obj);
             }
@@ -74,7 +75,7 @@ namespace AndroidManager.Business.Managers
 
             if (android.Skills.Where(s => !s.IsValid).Count() > 0) { return new Result(false, "Android wasn`t created: skill error"); }
 
-            AndroidEntity androidEntity = new AndroidEntity { Name = android.Name, Reliability = 10, Status = true };
+            AndroidEntity androidEntity = new AndroidEntity { Name = android.Name, Reliability = 10, Status = true , Avatar = android.Avatar};
 
             JobEntity job = await _context.Jobs.FirstOrDefaultAsync(j => j.Id == android.JobId);
 
@@ -147,6 +148,7 @@ namespace AndroidManager.Business.Managers
             }
 
             androidEntity.Name = android.Name;
+            androidEntity.Avatar = android.Avatar;
 
             List<SkillEntity> skillEntities = new List<SkillEntity>();
             SkillEntity currEntity;

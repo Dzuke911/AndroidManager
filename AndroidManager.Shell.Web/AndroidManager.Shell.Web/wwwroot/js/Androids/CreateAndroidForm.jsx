@@ -22,6 +22,8 @@
 
             let Skills = this.state.currentSkills;
 
+            console.log(Avatar);
+
             let data = { "Name": Name, "JobId": JobId, "Skills": Skills, "Avatar": Avatar };
 
             this.props.onCreateAndroid(data);

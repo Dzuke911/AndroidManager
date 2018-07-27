@@ -11,14 +11,16 @@ namespace AndroidManager.Business.Models
         public readonly string Name;
         public readonly int JobId;
         public readonly Skill[] Skills;
+        public readonly string Avatar;
 
         public readonly bool IsValid = true;
 
-        public Android(string name, int jobId, params Skill[] skills)
+        public Android(string name, int jobId, string avatar, params Skill[] skills)
         {
             Skills = skills;
             Name = name;
             JobId = jobId;
+            Avatar = avatar;
 
             if (name.Length < 5 || name.Length > 24)
             {

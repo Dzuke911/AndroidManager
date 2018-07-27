@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json.Linq;
 using AndroidManager.Business.Interfaces;
 using AndroidManager.Business.Models;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 
 namespace AndroidManager.Shell.Web.Controllers
 {
@@ -18,12 +21,14 @@ namespace AndroidManager.Shell.Web.Controllers
         private readonly IAndroidsManager _androidsManager;
         private readonly IJobsManager _jobsManager;
         private readonly ISkillsManager _skillsManager;
+        private readonly IHostingEnvironment _env;
 
-        public AndroidsController(IAndroidsManager androidsManager, IJobsManager jobsManager, ISkillsManager skillsManager)
+        public AndroidsController(IAndroidsManager androidsManager, IJobsManager jobsManager, ISkillsManager skillsManager, IHostingEnvironment env)
         {
             _androidsManager = androidsManager;
             _jobsManager = jobsManager;
             _skillsManager = skillsManager;
+            _env = env;
         }
 
         [HttpGet]
@@ -54,7 +59,7 @@ namespace AndroidManager.Shell.Web.Controllers
                 skills.Add(currSkill);
             }
 
-            Android newAndroid = new Android(android.Value<string>("Name"), android.Value<int>("JobId"), skills.ToArray());
+            Android newAndroid = new Android(android.Value<string>("Name"), android.Value<int>("JobId"), android.Value<string>("Avatar"), skills.ToArray());
 
             Result res = await _androidsManager.TryCreate(newAndroid);
 
@@ -78,7 +83,7 @@ namespace AndroidManager.Shell.Web.Controllers
                 skills.Add(currSkill);
             }
 
-            Android newAndroid = new Android(android.Value<string>("Name"), android.Value<int>("JobId"), skills.ToArray());
+            Android newAndroid = new Android(android.Value<string>("Name"), android.Value<int>("JobId"), android.Value<string>("Avatar"), skills.ToArray());
             Result res = await _androidsManager.TryUpdate(android.Value<int>("Id"), newAndroid);
 
             if (res.Succeeded) { return Ok(res.ToJson()); }
@@ -98,12 +103,23 @@ namespace AndroidManager.Shell.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddImage([FromBody]JObject obj)
+        public async Task<IActionResult> Upload(AvatarViewModel model)
         {
-            var file = obj.Property("File");
-            var name = obj.Property("Name");
+            IFormFile file = model.File;
 
-            return Ok(true);
+            if (file.Length > 0)
+            {
+                string path = Path.Combine(_env.WebRootPath, "images");
+                using (FileStream fs = new FileStream(Path.Combine(path, file.FileName), FileMode.Create))
+                {
+                    await file.CopyToAsync(fs);
+                }
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }
