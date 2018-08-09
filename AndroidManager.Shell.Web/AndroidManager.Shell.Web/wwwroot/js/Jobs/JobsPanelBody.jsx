@@ -1,4 +1,6 @@
-﻿class JobsPanelBody extends React.Component {
+﻿require('./Job');
+require('./CreateJobButton');
+class JobsPanelBody extends React.Component {
 
     constructor(props) {
         super(props);

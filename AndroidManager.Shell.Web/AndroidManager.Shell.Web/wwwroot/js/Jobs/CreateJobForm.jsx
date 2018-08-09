@@ -1,4 +1,7 @@
-﻿class CreateJobForm extends React.Component {
+﻿require('./JobNameInput');
+require('./JobDescriptionInput');
+require('./JobComplexityInput');
+class CreateJobForm extends React.Component {
     constructor(props) {
         super(props);
 
